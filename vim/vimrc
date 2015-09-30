@@ -1,0 +1,206 @@
+set tabstop=4
+set expandtab
+set softtabstop=4
+set shiftwidth=4
+set incsearch
+set hlsearch
+set smartindent
+set cindent
+set nu
+set foldcolumn=2
+set textwidth=80
+set colorcolumn=120
+set laststatus=2
+set nocompatible
+set showcmd
+set completeopt-=preview
+
+" Set mapleader
+let mapleader = ','
+let g:mapleader = ','
+
+" Key mappings to jumping between windows
+nmap <C-H> <C-W>h
+nmap <C-J> <C-W>j
+nmap <C-K> <C-W>k
+nmap <C-L> <C-W>l
+
+" Key mappings to ease browsing long line
+noremap <Down>  gj
+noremap <Up>    gk
+inoremap <Down> <C-O>gj
+inoremap <Up>   <C-O>gk
+
+" neobundle {{{
+if has('vim_starting')
+  " Required:
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+" Required:
+call neobundle#begin(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" My Bundles here:
+NeoBundle 'Valloric/YouCompleteMe'
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'majutsushi/tagbar'
+NeoBundle 'wesleyche/SrcExpl'
+NeoBundle 'kien/ctrlp.vim'
+NeoBundle 'SirVer/ultisnips.git'
+NeoBundle 'honza/vim-snippets'
+NeoBundle 'Raimondi/delimitMate.git'
+NeoBundle 'altercation/vim-colors-solarized.git'
+NeoBundle 'Lokaltog/vim-easymotion'
+NeoBundle 'scrooloose/nerdcommenter'
+NeoBundle 'Lokaltog/vim-powerline'
+NeoBundle 'fholgado/minibufexpl.vim'
+NeoBundle 'dkprice/vim-easygrep'
+
+call neobundle#end()
+
+" Required:
+filetype plugin indent on
+
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
+" }}}
+
+" YouCompleteMe {{{
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_confirm_extra_conf = 0
+
+let g:ycm_complete_in_comments_and_strings = 1
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_key_list_select_completion = ['<C-N>', '<Down>']
+let g:ycm_key_invoke_completion = '<C-Space>'
+let g:ycm_error_symbol = '✗'
+let g:ycm_warning_symbol = '⚠'
+
+let g:ycm_filetype_whitelist = { 'cpp' : 1, 'c' : 1}
+let g:ycm_filetype_blacklist = {
+  \'vim' : 1,
+  \'vimshell' : 1,
+  \'snippets' : 1,
+  \'cmake' : 1,
+  \'html' : 1
+  \}
+
+nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nmap <F4> :YcmDiags<CR>
+" }}}
+
+" NERDTree {{{
+let g:NERDTreeWinPos = 'right'
+map <leader>n :NERDTreeToggle<CR>
+
+" close the vim if the only window left open is NERDTree 
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+" }}}
+
+" Tagbar {{{
+let g:tagbar_left = 1
+let g:tagbar_singleclick = 1
+let g:tagbar_autoshowtag = 1
+
+nmap <leader>t :TagbarToggle<CR>
+" }}}
+
+" source explorer {{{
+nmap <leader>s :SrcExplToggle<CR>
+"nmap <C-I> <C-W>j:call g:SrcExpl_Jump()<CR>
+"nmap <C-O> :call g:SrcExpl_GoBack()<CR>
+
+let g:SrcExpl_refreshTime = 500
+let g:SrcExpl_isUpdateTags = 0
+let g:SrcExpl_searchLocalDef = 0
+let g:SrcExpl_jumpKey = "<ENTER>"
+let g:SrcExpl_gobackKey = "<SPACE>"
+let g:SrcExpl_prevDefKey = "<F3>"
+let g:SrcExpl_nextDefKey = "<F4>"
+let g:SrcExpl_updateTagsKey = "<F12>"
+" Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to 
+" create/update the tags file 
+" let g:SrcExpl_updateTagsCmd = "ctags --exclude=rootfs --exclude=staging --sort=foldcase -R ."
+
+" Add the buffer names in below list according to ":buffers!"
+let g:SrcExpl_pluginList = [
+        \ "__Tagbar__",
+        \ "NERD_tree_1",
+        \ "Source_Explorer"
+    \ ]
+" }}}
+
+" ctrlp {{{
+let g:ctrlp_map = '<leader>p'
+
+" can be toggled on/off by pressing <c-d> inside the prompt
+" let g:ctrlp_by_filename = 1
+
+" can be toggled on/off by pressing <c-r> inside the prompt
+" let g:ctrlp_regexp = 1
+
+" can be toggled type on by pressing <c-f> or <c-b> in the prompt
+" }}}
+
+" ultisnips {{{
+let g:UltiSnipsExpandTrigger = "<TAB>"
+
+" use the Ycm's select key <C-N> to jump forward
+"let g:UltiSnipsJumpForwardTrigger = "<TAB>"
+let g:UltiSnipsJumpBackwardTrigger = "<C-P>"
+" }}}
+
+" delimitMate {{{
+" Expand <cr> to one line
+let g:delimitMate_expand_cr = 1
+" }}}
+
+" Solarized {{{
+let g:solarized_termtrans=1
+syntax enable
+set background=dark
+colorscheme solarized
+" }}}
+
+" vim-powerline {{{
+" 1 Add the patched font for terminal and vim-powerline(refer to
+" ~/resource/font/README.rst)
+" 2 let g:Powerline_symbols = 'fancy' 
+" 3 set t_Co=256  "Explicitly tell Vim that the terminal supports 256 colors, it
+" doesn't need to set this option if $TERM has been set to 'xterm-256color' or 'screen-256color'
+
+let g:Powerline_symbols = 'fancy'
+"let g:Powerline_stl_path_style = 'full'
+" }}}
+
+" minibufexpl {{{
+noremap <leader>k :MBEbn<CR>
+noremap <leader>j :MBEbp<CR>
+let g:miniBufExplUseSingleClick = 1
+let g:miniBufExplCycleArround = 1
+" }}}
+
+" easygrep {{{
+let g:EasyGrepCommand=1
+"let g:EasyGrepFilesToExclude=".git,tags,*.o"
+let g:EasyGrepFilesToExclude=".git,tags,*.o,output_pclint_*.xml,changes,cppcheck-reports,cppncss-reports,external-components,flint,fpga,images,linux,msp430,rootfs,staging,ti-dvsdk_dm368-evm_4_02_00_06,tools,uboot-1.3.4"
+let g:EasyGrepRecursive=1
+let g:EasyGrepSearchCurrentBufferDir=0
+let g:EasyGrepJumpToMatch=0
+" }}}
+
+" Automatically locate the quickfix window to the bottom
+autocmd FileType qf wincmd J
+
+" Automatically adjust the height of quickfix window 
+au FileType qf call AdjustWindowHeight(3, 10)
+function! AdjustWindowHeight(minheight, maxheight)
+  exe max([min([line("$")+1, a:maxheight]), a:minheight]) . "wincmd _"
+endfunction
