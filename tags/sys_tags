@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Generate tags file for system library(c & c++) to ~/share/tags
+# You can add personal folder(such as boost,wxWidgets...) at the end of the command line
+
+ctags -I __THROW -I __attribute_pure__ -I __nonnull -I __attribute__ --sort=foldcase --file-scope=yes --links=yes --c-kinds=+px --c++-kinds=+px --fields=+iaS --extra=+fq -R -f ~/share/tags /usr/include /usr/local/include

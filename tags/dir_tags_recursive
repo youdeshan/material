@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: dirtags dir"
+    exit 1
+fi
+
+cur_dir=`cd $1;pwd`
+
+# travesing the subdirs to generate tags file
+# -mindepth 1 --> to exclude . directory
+find ${cur_dir} -maxdepth 1 -mindepth 1 -type d -exec dir_tags_recursive {} \;
+
+# run 'ctags *.[ch]' directly will generate a tags file whether exist *.[ch]
+# files or not, so use 'find ... -exec ctags ...' command replace
+find ${cur_dir} -maxdepth 1 -name \*.[ch] -exec ctags --sort=foldcase --c-kinds=+l --extra=+f -f ${cur_dir}/tags {} +
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]; then
+    echo "Usage: dir_tags_global dir"
+    exit 1
+fi
+
+cur_dir=`cd $1;pwd`
+echo "Generate a global tags file for ${cur_dir} recursively"
+
+ctags --sort=foldcase --file-scope=no --c-kinds=+px --extra=+f -R ${cur_dir}
