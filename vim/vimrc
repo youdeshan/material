@@ -33,8 +33,8 @@ inoremap <Up>   <C-O>gk
 
 " neobundle {{{
 if has('vim_starting')
-  " Required:
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
+" Required:
+set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
 " Required:
@@ -83,12 +83,12 @@ let g:ycm_warning_symbol = '⚠'
 
 let g:ycm_filetype_whitelist = { 'cpp' : 1, 'c' : 1}
 let g:ycm_filetype_blacklist = {
-  \'vim' : 1,
-  \'vimshell' : 1,
-  \'snippets' : 1,
-  \'cmake' : 1,
-  \'html' : 1
-  \}
+\'vim' : 1,
+\'vimshell' : 1,
+\'snippets' : 1,
+\'cmake' : 1,
+\'html' : 1
+\}
 
 nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
@@ -204,3 +204,12 @@ au FileType qf call AdjustWindowHeight(3, 10)
 function! AdjustWindowHeight(minheight, maxheight)
   exe max([min([line("$")+1, a:maxheight]), a:minheight]) . "wincmd _"
 endfunction
+
+" Update the tags file in the dir of current editing file
+" Just for the .[ch] in the current dir, not recursively
+:nmap <leader>c :!(cd %:p:h;ctags --sort=foldcase --c-kinds=+l --extra=+f *.[ch])&<CR><CR>
+
+" Update the tags file in the ROOT dir(project root)
+:nmap <leader>r :!(dir_tags_global $ROOT)&<CR><CR>
+
+set tags+=~/share/tags
