@@ -5,12 +5,16 @@ These three shell scripts are used to generate tags files for a project.
 
 Steps to set up an IDE with tags:
 1. copy these 3 shell scripts to a folder and add this folder path to the $PATH variable
-   eg: in ~/.bashrc add: PATH=$PATH:~/tools
+   eg: in ~/.bashrc add: PATH=$PATH:~/software/tools
 
 2. generate the system scope tags file(used by all projects)
    2.1 run command: sys_tags, it will generate ~/share/tags file(hard code)
    2.2 add the tags file path to tags option in .vimrc:
-       set tags+=~/share/tags
+       set tags=./tags;,~/share/tags
+       Note: ./tags means the tags file in the directory of current editing file
+             semicolon(;) means to look for tags file upward parent directories
+             comma(,) means to look for tags file in the following specified
+             directory
 
 3. generate tags files for specific project
    3.1 export ROOT=%proj root path% 
