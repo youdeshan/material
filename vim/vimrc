@@ -212,4 +212,4 @@ endfunction
 " Update the tags file in the ROOT dir(project root)
 :nmap <leader>r :!(dir_tags_global $ROOT)&<CR><CR>
 
-set tags+=~/share/tags
+set tags=./tags;,~/share/tags

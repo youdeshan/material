@@ -3,8 +3,6 @@
 #include <dirent.h>
 #include <string.h>
 
-#include "common.h"
-
 struct point {
     int x;
     int y;
@@ -22,8 +20,6 @@ int main(int argc, char* argv[]) {
   if (argc != 2) {
     err_quit("usage: ls dir_name");
   }
-  test_print();
-  gCount++;
   _test();
 
   struct point pt;
