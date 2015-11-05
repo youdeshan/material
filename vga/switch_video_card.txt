@@ -1,0 +1,26 @@
+The laptop which has both nvidia card and integrated vidio card will have great
+noise. So it is necessary to switch between these two cards to avoid noise.
+
+1. identify your NVIDIA graphics hardware, run the following command:
+   lspci -k | grep -EA2 'VGA|3D'
+
+   actually, you will see the nvidia card and integrated card are both enabled.
+
+2. check which driver version support your nvidia adapter
+   http://www.nvidia.com/Download/Find.aspx?lang=en-us
+
+3. install the latest driver version which supports your nvidia adapter(eg:
+        GeForce 310M)
+   sudo apt-get install nvidia-340
+
+   actually, the prime-select package will be installed automatically
+
+4. switch to integrated card
+   sudo prime-select intel
+
+5. reboot
+
+Futhermore, you can run the following command to reduce the hard disk acoustic:
+   sudo hdparm -M128 /dev/sda
+
+
