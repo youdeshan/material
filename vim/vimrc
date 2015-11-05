@@ -140,6 +140,9 @@ let g:SrcExpl_pluginList = [
 " ctrlp {{{
 let g:ctrlp_map = '<leader>p'
 
+" Must set 'w' to find file recursively
+let g:ctrlp_working_path_mode = 'w'
+
 " can be toggled on/off by pressing <c-d> inside the prompt
 " let g:ctrlp_by_filename = 1
 
