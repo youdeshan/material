@@ -1,0 +1,26 @@
+~/.bashrc
+export CMAKE_PREFIX_PATH=~/share/install
+export CMAKE_INSTALL_PREFIX=~/share/install
+PATH=$PATH:~/share/install/bin
+
+////////////////////////////////////////////////
+
+pre-build
+1. if g++ and make are not installed:
+   sudo apt-get install build-essential
+
+2. install the GTK development libraries(needed by building wxWidgets)
+    sudo apt-get install libgtk-3-dev
+
+////////////////////////////////////////////////
+
+build third-party libraries or tools
+1. build wxWidgets
+   ./configure --prefix=$CMAKE_INSTALL_PREFIX --disable-shared --enable-debug
+   make
+   make install
+
+2. build cmake
+   ./bootstrap --prefix=$CMAKE_INSTALL_PREFIX
+   make
+   make install
