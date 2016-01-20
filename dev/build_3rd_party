@@ -19,6 +19,13 @@ build third-party libraries or tools
    ./configure --prefix=$CMAKE_INSTALL_PREFIX --disable-shared --enable-debug
    make
    make install
+   
+   wx-config is a small command-line utility which can help you while building on unix-like systems (including linux and Mac OS X) It will :
+    tell you what compile flags to use (wx-config --cxxflags)
+    tell you what link flags to use (wx-config --libs)
+    can manage multiple wxWidgets installs with different configurations (wx-config --list et al)
+    
+    eg: `wx-config --cxx --cxxflags` -o out *.cpp `wx-config --libs`
 
 2. build cmake
    ./bootstrap --prefix=$CMAKE_INSTALL_PREFIX
