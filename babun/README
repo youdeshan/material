@@ -1,0 +1,21 @@
+Babun is a software to operate windows in a unix like environment.
+
+1. Download the software from "babun.github.io" and install it
+2. Set up babun according to the webpage content.
+   * babun shell /bin/bash
+3. Set up babun font(all following actions are happened under windows)
+   3.1 Download the Monaco font(monaco.ttf) from "https://github.com/todylu/monaco.ttf"
+   3.2 run Win+R open the run dialog, input "fonts" to open font folder
+   3.3 click the "Font setting" on the left, 
+       check "Allow fonts to be installed using a shortcut(advanced)" in the
+       "Installation settings" option
+   3.4 right click on "monaco.ttf" and select "install it as shortcut"
+   3.5 right click on babun title and select "Options...", select the "Monaco"
+   font in "Text" panel
+
+3. Download MacType from "https://code.google.com/archive/p/mactype/downloads",
+   and install this software to render your windows font smoothly and much more
+   convenient to read.
+
+
+5. Install the necessary tools in Babun(github/material/...) 
