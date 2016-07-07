@@ -20,6 +20,10 @@ set clipboard=unnamed " default to use selection cache register"
 let mapleader = ','
 let g:mapleader = ','
 
+" Key mappings to escape from insert and select mode
+imap <leader>q <ESC>
+vmap <leader>q <ESC>
+
 " Key mappings to jumping between windows
 nmap <C-H> <C-W>h
 nmap <C-J> <C-W>j

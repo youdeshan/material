@@ -1,0 +1,16 @@
+let mapleader = ','
+
+" Modify shortcut from Tools->options->environment->keyboard:
+" 1. Edit.GoToDefinition --> Ctrl+]
+" 2. View.NavigateBackward --> Ctrl+T
+imap <leader>q <ESC>
+vmap <leader>q <ESC>
+nmap <leader>l :vsc VAssistX.ListMethodsInCurrentFile<CR>
+nmap <leader>b :vsc Build.BuildOnlyProject<CR>
+map <leader>c :vsc Edit.CommentSelection<CR>
+map <leader>u :vsc Edit.UncommentSelection<CR>
+map <leader>e :vsc View.ErrorList<CR>
+map <leader>o :vsc View.Output<CR>
+map <leader>f :vsc View.FindResults1<CR>
+map <leader>r :vsc VAssistX.FindReferencesResults<CR>
+
