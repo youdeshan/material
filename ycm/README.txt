@@ -23,3 +23,21 @@ install the compiler by yourself(sudo apt-get install g++)
 
 error 1: "YCM is compiled with Python2, but loaded with Python3"
 solution: add 'let g:ycm_path_to_python_interpreter= '/usr/bin/python'' to ~/.vimrc
+
+Support javascript:
+1. install Node.js and npm
+   1.1 sudo git clone https://github.com/nodejs/node.git
+   1.2 sudo chmod -R 755 node
+   1.3 cd node
+       sudo ./configure --prefix=~/install
+       sudo make
+       sudo make install
+   1.4 node --version
+
+2. navigate to ~/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/tern_runtime
+   run cmd: npm install --production
+
+3. modify ~/.vimrc
+   let g:ycm_filetype_whitelist = { 'cpp' : 1, 'c' : 1, 'javascript' : 1} 
+
+That's OK, enjoy the javascript world!
