@@ -40,4 +40,13 @@ Support javascript:
 3. modify ~/.vimrc
    let g:ycm_filetype_whitelist = { 'cpp' : 1, 'c' : 1, 'javascript' : 1} 
 
-That's OK, enjoy the javascript world!
+Support python:
+1. By default YCM runs jedi with the same Python interpreter used by the ycmd
+server, so if you would like to use a different interpreter, use the following
+option specifying the Python binary to use:
+let g:ycm_python_binary_path = '/usr/bin/python'
+
+2. let g:ycm_filetype_whitelist = { 'cpp' : 1, 'c' : 1, 'javascript' : 1,
+    'python' : 1} 
+
+That's OK, enjoy the javascript and python world!
