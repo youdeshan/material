@@ -5,6 +5,7 @@ let mapleader = ','
 " 2. View.NavigateBackward --> Ctrl+T
 imap <leader>q <ESC>
 vmap <leader>q <ESC>
+nmap <leader>v <C-v>
 nmap <leader>l :vsc VAssistX.ListMethodsInCurrentFile<CR>
 nmap <leader>b :vsc Build.BuildOnlyProject<CR>
 map <leader>c :vsc Edit.CommentSelection<CR>
