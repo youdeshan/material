@@ -5,12 +5,19 @@
 #include <QPushButton>
 #include "newspaper.h"
 #include "reader.h"
+#include "logindialog.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    w.show();
+    LoginDialog login_dlg;
+    if (login_dlg.exec() == QDialog::Accepted) {
+        w.show();
+        return a.exec();
+    } else {
+        return 0;
+    }
     //QLabel label("Hello world!");
     //label.show();
 
@@ -24,5 +31,4 @@ int main(int argc, char *argv[])
     QObject::connect(&newspaper, &Newspaper::newPaper, &reader, &Reader::receiveNewspaper);
     newspaper.send();*/
 
-    return a.exec();
 }

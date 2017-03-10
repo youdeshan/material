@@ -24,13 +24,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    logindialog.cpp
 
 HEADERS  += mainwindow.h \
     newspaper.h \
-    reader.h
+    reader.h \
+    logindialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    logindialog.ui
 
 RESOURCES += \
     res.qrc
