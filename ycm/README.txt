@@ -1,3 +1,9 @@
+Precompile: 
+  if there are some errors when download ycm plugin source code by Neobundle, 
+  please run the following command in ~/.vim/bundle/YouCompleteMe folder:
+    git submodule update --init --recursive
+
+======================================================================
 Compile the YCM on Ubuntu 16.04 LTS
 
 1. sudo apt-get install cmake
