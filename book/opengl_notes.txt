@@ -1,0 +1,6 @@
+OpenGL 只能够绘制坐标空间内的几何体图元
+NDC: Normalized Device Coordinate
+   规格化设备坐标系统
+   
+对于OpenGL 程序员而言， 着色器就是使用OpenGL 着色语言（OpenGL Shading
+Language，GLSL）编写的一个小型函数
