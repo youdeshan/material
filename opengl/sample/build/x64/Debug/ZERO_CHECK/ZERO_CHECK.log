@@ -1,0 +1,16 @@
+﻿  Checking Build System
+  CMake is re-running because D:/program/opengl/build/CMakeFiles/generate.stamp is out-of-date.
+    the file 'D:/program/opengl/CMakeLists.txt'
+    is newer than 'D:/program/opengl/build/CMakeFiles/generate.stamp.depend'
+    result='-1'
+  -- Boost version: 1.62.0
+  -- boost all required components are found.
+  -- Configuring done
+  CMake Warning (dev) in src/CMakeLists.txt:
+    Policy CMP0043 is not set: Ignore COMPILE_DEFINITIONS_<Config> properties.
+    Run "cmake --help-policy CMP0043" for policy details.  Use the cmake_policy
+    command to set the policy and suppress this warning.
+  This warning is for project developers.  Use -Wno-dev to suppress it.
+  
+  -- Generating done
+  -- Build files have been written to: D:/program/opengl/build

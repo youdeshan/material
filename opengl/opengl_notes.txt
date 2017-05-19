@@ -1,0 +1,99 @@
+OpenGL 是一种应用程序编程接口（Application Programming Interface, API），它是一种
+可以对图形硬件设备特性进行访问的软件库
+
+一个用来渲染图像的OpenGL 程序需要执行的主要操作如下所示:
+1. 从 OpenGL 的几何图元中设置数据，用于构建形状。
+2. 使用不同的着色器（shader）对输入的图元数据执行计算操作，判断它们的位置、颜
+色，以及其他渲染属性。
+3. 将输入图元的数学描述转换为与屏幕位置对应的像素片元（fragment）。这一步也称
+作光栅化（rasterization）。
+4. 最后，针对光栅化过程产生的每个片元，执行片元着色器（fragment shader），从而
+决定这个片元的最终颜色和位置。
+5. 如果有必要，还需要对每个片元执行一些额外的操作，例如判断片元对应的对象是
+否可见，或者将片元的颜色与当前屏幕位置的颜色进行融合
+
+OpenGL 是使用客户端- 服务端的形式实现的，我们编写的应用程序可以看做客户端，
+而计算机图形硬件厂商所提供的OpenGL 实现可以看做服务端。OpenGL 的某些实现（例如
+X 窗口系统的实现）允许服务端和客户端在一个网络内的不同计算机上运行。这种情况下，
+客户端负责提交OpenGL 命令，这些OpenGL 命令然后被转换为窗口系统相关的协议，通
+过共享网络传输到服务端，最终执行并产生图像内容。
+
+所有OpenGL 程序的基本结构:
+1. 初始化物体渲染所对应的状态
+2. 设置需要渲染的物体
+
+渲染（render）:表示计算机从模型创建最终图像的过程
+OpenGL 是基于光栅化的系统，但是也有
+别的方法用于生成图像。例如光线跟踪（ray tracing)
+
+OpenGL 只能够绘制坐标空间内的几何体图元
+NDC: Normalized Device Coordinate
+   规格化设备坐标系统
+   
+OpenGL 另一个最本质的概念叫做着色器，它是图形硬件设备所执行的一类特殊函数。
+理解着色器最好的方法是把它看做专为图形处理单元（通常也叫做GPU）编译的一种小型
+程序
+OpenGL 在其内部包含了所有的编译器工具，可以直接从着色器源代码创建GPU 所
+需的编译代码并执行。
+其中最常用的包括的顶点着色器（vertex shader）以及片元着色器，
+前者用于处理顶点数据，后者用于处理光栅化后的片元数据.所有的OpenGL 程序都需要用到这两类着
+色器
+
+对于OpenGL 程序员而言， 着色器就是使用OpenGL 着色语言（OpenGL Shading
+Language，GLSL）编写的一个小型函数
+
+OpenGL Utility Toolkit（GLUT）
+OpenGL Extension Wrangler(glew)
+
+OpenGL 渲染管线(rendering pipeline):
+一系列数据处理过程，并且将应用程序的数据转换到最终渲染的图像
+OpenGL 首先接收用户提供的几何数据（顶点和几何图元），并且将它输入到一系列
+着色器阶段中进行处理，包括：顶点着色、细分着色（它本身包含两个着色器,细分控制和细分计算着色器），以及最
+后的几何着色，然后它将被送入光栅化单元（rasterizer）。光栅化单元负责对所有剪切
+区域（clipping region）内的图元生成片元数据，然后对每个生成的片元都执行一个片元
+着色器。
+顶点着色（包括细分和几何着色）决定了一个图元应该位于屏幕的什么位置，而
+片元着色使用这些信息来决定某个片元的颜色应该是什么
+
+VAO（Vertex Array Object）
+VAO负责管理顶点属性，而这些顶点属性从0到GL_MAX_VERTEX_ATTRIBS​ - 1被编号
+eg: 顶点属性０　－－　顶点坐标　　　{ {1, 1, 1}, {0, 0, 0}, {0, 0, 1} }  
+　　顶点属性１  －－　顶点纹理坐标　{ {0, 0}, {0.5, 0}, {0, 1} }
+若顶点索引列表为：{2, 1, 0, 2, 1, 2} 
+则合并后的顶点属性列表为：
+　　{[{0, 0, 1}, {0, 1}], [{0, 0, 0}, {0.5, 0}], [{1, 1, 1}, {0, 0}], [{0, 0, 1}, {0, 1}], [{0, 0, 0}, {0.5, 0}], [{0, 0, 1}, {0, 1}] } 
+
+// 返回n 个未使用的顶点数组对象名称到数组arrays 中
+1.1 void glGenVertexArrays(GLsizei n, GLuint *arrays);
+glGen* 的形式的函数负责分配不同类型的OpenGL对象的名称，
+名称类似C 语言中的一个指针变量，我们必须分配内存并且用名称引
+用它之后，名称才有意义。在OpenGL 中，这个分配的机制叫做绑定对象（bind an object），
+它是通过一系列glBind* 形式的OpenGL 函数集合去实现的
+
+1.2 void glBindVertexArray(GLuint array);
+如果输入的变量array 非0， 并且是
+glGenVertexArrays() 所返回的，那么它将创建一个新的顶点数组对象并且与其名称关联
+起来。如果绑定到一个已经创建的顶点数组对象中，那么会激活这个顶点数组对象，并
+且直接影响对象中所保存的顶点数组状态。如果输入的变量array 为0，那么OpenGL 将
+不再使用程序所分配的任何顶点数组对象，并且将渲染状态重设为顶点数组的默认状态。
+如果array 不是glGenVertexArrays() 所返回的数值， 或者它已经被glDelete-
+VertexArrays() 函数释放了，那么这里将产生一个GL_INVALID_OPERATION 错误。
+
+在两种情况下我们需要绑定一个对象：
+创建对象并初始化它所对应的数据时；
+以及每次我们准备使用这个对象，而它并不是当前绑定的对象时
+
+1.3 void glDeleteVertexArrays(GLsizei n, GLuint *arrays);
+删除n 个在arrays 中定义的顶点数组对象
+
+1.4 GLboolean glIsVertexArray(GLuint array);
+如果array 是一个已经用glGenVertexArrays() 创建且没有被删除的顶点数组对象的
+名称，那么返回GL_TRUE。如果array 为0 或者不是任何顶点数组对象的名称，那么返
+回GL_FALSE。
+
+
+
+void glEnableVertexAttribArray​(GLuint index​); 　－－〉enable顶点属性
+
+VBO（Vertex Buffer Object）
+
