@@ -1,3 +1,7 @@
+ OpenGL is not something you ship with your program, 
+ it's part of the graphics drivers and your program must use 
+ whatever OpenGL version is installed on the user's machine。
+
 OpenGL 是一种应用程序编程接口（Application Programming Interface, API），它是一种
 可以对图形硬件设备特性进行访问的软件库
 
@@ -39,9 +43,6 @@ OpenGL 在其内部包含了所有的编译器工具，可以直接从着色器�
 前者用于处理顶点数据，后者用于处理光栅化后的片元数据.所有的OpenGL 程序都需要用到这两类着
 色器
 
-对于OpenGL 程序员而言， 着色器就是使用OpenGL 着色语言（OpenGL Shading
-Language，GLSL）编写的一个小型函数
-
 OpenGL Utility Toolkit（GLUT）
 OpenGL Extension Wrangler(glew)
 
@@ -55,6 +56,7 @@ OpenGL 首先接收用户提供的几何数据（顶点和几何图元），并�
 顶点着色（包括细分和几何着色）决定了一个图元应该位于屏幕的什么位置，而
 片元着色使用这些信息来决定某个片元的颜色应该是什么
 
+1. 初始化顶点数组对象
 VAO（Vertex Array Object）
 VAO负责管理顶点属性，而这些顶点属性从0到GL_MAX_VERTEX_ATTRIBS​ - 1被编号
 eg: 顶点属性０　－－　顶点坐标　　　{ {1, 1, 1}, {0, 0, 0}, {0, 0, 1} }  
@@ -91,9 +93,68 @@ VertexArrays() 函数释放了，那么这里将产生一个GL_INVALID_OPERATION
 名称，那么返回GL_TRUE。如果array 为0 或者不是任何顶点数组对象的名称，那么返
 回GL_FALSE。
 
+2. 分配顶点缓存对象
+VBO（Vertex Buffer Object）
+VBO是顶点数组数据真正所在的地方,且由当前绑定的顶点数组对象(VAO)管理
+为了指定一个属性数据的格式和来源，我们需要告诉OpenGL，编号为0的属性使用哪个VBO，编号为1的属性使用哪个VBO等等。
 
+2.1 void glGenBuffers(GLsizei n, GLuint *buffers);
+返回n 个当前未使用的缓存对象名称，并保存到buffers 数组中。返回到buffers 中的
+名称不一定是连续的整型数据。返回的名称只用于分配其他缓存对象
+
+2.2 void glBindBuffer(GLenum target, GLuint buffer);
+指定当前激活的缓存对象.
+OpenGL 中有多种不同类型的缓存对象，因此绑定一个缓存时，需要指定它所对应的类型
+target: GL_ARRAY_BUFFER、
+        GL_ELEMENT_ARRAY_BUFFER、
+		GL_PIXEL_PACK_BUFFER、
+		GL_PIXEL_UNPACK_BUFFER、
+		GL_COPY_READ_BUFFER、
+		GL_COPY_WRITE_BUFFER、
+		GL_TRANSFORM_FEEDBACK_BUFFER
+		GL_UNIFORM_BUFFER
+glBindBuffer() 完成了三项工作：1）如果是第一次绑定buffer，且它是一个非零的无
+符号整型，那么将创建一个与该名称相对应的新缓存对象。2） 如果绑定到一个已经创建
+的缓存对象，那么它将成为当前被激活的缓存对象。3）如果绑定的buffer 值为0，那么
+OpenGL 将不再对当前target 应用任何缓存对象
+
+2.3 void glDeleteBuffers(GLsizei n, const GLuint *buffers);
+删除n个保存在buffers 数组中的缓存对象。被释放的缓存对象可以重用
+(例如，使用glGenBuffers())
+
+2.4 GLboolean glIsBuffer(GLuint buffer);
+如果buffer 是一个已经分配并且没有释放的缓存对象的名称，则返回GL_TRUE。如
+果buffer 为0 或者不是缓存对象的名称，则返回GL_FALSE。
+
+3. 将数据载入缓存对象
+两个任务：
+  分配顶点数据所需的存储空间
+  将数据从应用程序的数组中拷贝到OpenGL 服务端的内存中
+3.1 void glBufferData(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage);
+在OpenGL 服务端内存中分配size 个存储单元（通常为byte），用于存储数据或者索引。
+如果当前绑定的对象已经存在了关联的数据，那么会首先删除这些数据
+target: GL_ARRAY_BUFFER -- 顶点属性数据
+        GL_ELEMENT_ARRAY_BUFFER -- 索引数据
+		GL_PIXEL_UNPACK_BUFFER -- 像素数据
+		GL_PIXEL_PACK_BUFFER
+		GL_COPY_READ_BUFFER 
+		GL_COPY_WRITE_BUFFER -- 缓存之间的复制数据
+		GL_TEXTURE_BUFFER -- 纹理缓存中存储的纹理数据
+		GL_TRANSFORM_FEEDBACK_BUFFER -- 通过transform feedback 着色器获得的结果
+		GL_UNIFORM_BUFFER -- 一致变量
+size 表示存储数据的总数量。这个数值等于data 中存储的元素的总数乘以单位元素
+存储空间的结果。
+data 要么是一个客户端内存的指针，以便初始化缓存对象，要么是NULL。如果传
+入的指针合法，那么将会有size 大小的数据从客户端拷贝到服务端。如果传入NULL，
+那么将保留size 大小的未初始化的数据，以备后用
+usage 用于设置分配数据之后的读取和写入方式。
+可用的方式包括GL_STREAM_DRAW、GL_STREAM_READ、GL_STREAM_COPY、GL_STATIC_DRAW、
+GL_STATIC_READ、GL_STATIC_COPY、GL_DYNAMIC_DRAW、GL_DYNAMIC_READ 和GL_DYNAMIC_COPY。
+
+4. 初始化顶点与片元着色器
+使用的OpenGL 版本高于或等于3.1 时，都需要指定至少两个着色器：顶点着色器和片元着色器。
+对于OpenGL 程序员而言， 着色器就是使用OpenGL 着色语言（OpenGL Shading
+Language，GLSL）编写的一个小型函数
 
 void glEnableVertexAttribArray​(GLuint index​); 　－－〉enable顶点属性
-
-VBO（Vertex Buffer Object）
 
