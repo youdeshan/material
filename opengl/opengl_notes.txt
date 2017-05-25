@@ -156,5 +156,100 @@ GL_STATIC_READ、GL_STATIC_COPY、GL_DYNAMIC_DRAW、GL_DYNAMIC_READ 和GL_DYNAMI
 对于OpenGL 程序员而言， 着色器就是使用OpenGL 着色语言（OpenGL Shading
 Language，GLSL）编写的一个小型函数
 
-void glEnableVertexAttribArray​(GLuint index​); 　－－〉enable顶点属性
+着色管线装配: 将应用程序与着色器之间，以及不同着色阶段之间的数据通道连接起来。
+
+void glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer);
+设置index（着色器中的属性位置）位置对应的数据值。
+pointer 表示缓存对象中，从起始位置开始计算的数组数据的偏移值（假设起始地址为0），使用基本的系统单位（byte）。
+size 表示每个顶点需要更新的分量数目，可以是1、2、3、4 或者GL_BGRA。
+type 指定了数组中每个元素的数据类型（GL_BYTE、GL_UNSIGNED_BYTE、GL_SHORT、GL_UNSIGNED_SHORT、GL_INT、GL_UNSIGNED_INT、GL_FIXED、
+GL_HALF_FLOAT、GL_FLOAT 或GL_DOUBLE）。
+normalized 设置顶点数据在存储前是否需要进行归一化（或者使用glVertexAttribFourN*() 函数）。
+stride 是数组中每两个元素之间的大小偏移值（byte）。如果stride 为0，那么数据应该紧密地封装在一起
+
+void glEnableVertexAttribArray(GLuint index);
+void glDisableVertexAttribArray(GLuint index);
+设置是否启用与index 索引相关联的顶点数组。index 必须是一个介于0 到GL_
+MAX_VERTEX_ATTRIBS-1 之间的值。
+
+5. 使用OpenGL 进行渲染
+5.1 void glClear(GLbitfield mask);
+清除指定的缓存数据并重设为当前的清除值。
+mask 是一个可以通过逻辑“或”操作来指定多数值的参数
+GL_COLOR_BUFFER_BIT -- 颜色缓存
+GL_DEPTH_BUFFER_BIT -- 深度缓存
+GL_STENCIL_BUFFER_BIT -- 模板缓存
+OpenGL 默认的清除颜色，即黑色
+
+5.2 void glClearColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);
+设置当前使用的清除颜色值，用于RGBA 模式下对颜色缓存的清除工作。
+这里的red、green、blue、alpha 都会被截断到[0, 1] 的范围内。
+默认的清除颜色是(0, 0, 0, 0)，在RGBA 模式下它表示黑色。
+
+避免冗余的状态切换；所有在程序运行时不会发生变化的数值都应该在init() 中设置
+
+5.3 void glDrawArrays(GLenum mode, GLint first, GLsizei count);
+使用当前绑定的顶点数组元素来建立一系列的几何图元，
+起始位置为first，而结束位置为first + count-1。
+mode 设置了构建图元的类型，它可以是GL_POINTS、GL_LINES、GL_LINE_STRIP、
+GL_LINE_LOOP、GL_TRIANGLES、GL_TRIANGLE_STRIP、GL_TRIANGLE_FAN 和GL_PATCHES 中的任意一种
+
+5.4 void glFlush(void);
+强制之前的OpenGL 命令立即执行，这样就可以保证它们在一定时间内全部完成。
+    void glFinish(void);
+强制所有当前的OpenGL 命令立即执行，并且等待它们全部完成
+
+//////////////////////////////////////////////////////////////////////////
+void glEnable(GLenum capability);
+void glDisable(GLenum capability);
+glEnable() 会开启一个模式，glDisable() 会关闭它。
+有很多枚举量可以作为模式参数传入glEnable() 和glDisable()。
+例如:GL_DEPTH_TEST 可以用来开启或者关闭深度测试；
+GL_BLEND 可以用来控制融合的操作，
+而GL_RASTERIZER_DISCARD 用于transform feedback 过程中的高级渲染控制。
+
+GLboolean glIsEnabled(GLenum capability);
+根据是否启用当前指定的模式，返回GL_TRUE 或者GL_FALSE
+
+第二章　着色器基础
+GLSL 是一种专门为图形开发设计的编程语言，
+但是你会发现它与“C”语言非常类似，当然还有一点C++ 的影子
+
+4.3 版本的图形管线有4 个处理阶段，还有1 个通用
+计算阶段，每个阶段都需要由一个专门的着色器进行控制。
+1）顶点着色阶段（vertex shading stage）将接收你在顶点缓存对象中给出的顶点数据，
+独立处理每个顶点。这个阶段对于所有的OpenGL 程序都是必需的，并且必须绑定一个着
+色器。第3 章将对顶点着色的操作进行介绍。
+2）细分着色阶段（tessellation shading stage）是一个可选的阶段，与应用程序中显式地
+指定几何图元的方法不同，它会在OpenGL 管线内部生成新的几何体。这个阶段启用之后，
+会收到来自顶点着色阶段的输出数据，并且对收到的顶点进行进一步的处理。第9 章会介
+绍细分着色阶段的内容。
+3）几何着色阶段（geometry shading stage）也是一个可选的阶段，它会在OpenGL 管
+线内部对所有几何图元进行修改。这个阶段会作用于每个独立的几何图元。此时你可以选
+择从输入图元生成更多的几何体，改变几何图元的类型（例如将三角形转化为线段），或者
+放弃所有的几何体。如果这个阶段被启用，那么几何着色阶段的输入可能会来自顶点着色
+阶段完成几何图元的顶点处理之后，也可能来自细分着色阶段生成的图元数据（如果它也被
+启用）。第10 章会介绍几何着色阶段的内容。
+4）OpenGL 着色管线的最后一个部分是片元着色阶段（Fragment shading stage）。这个阶
+段会处理OpenGL 光栅化之后生成的独立片元（如果启用了采样着色的模式，就是采样数据），
+并且这个阶段也必须绑定一个着色器。在这个阶段中，计算一个片元的颜色和深度值，然后
+传递到管线的片元测试和混合的模块。片元着色阶段的介绍将会贯穿本书的很多章节。
+5）计算着色阶段（Compute shading stage）和上述阶段不同，它并不是图形管线的一部
+分，而是在程序中相对独立的一个阶段。计算着色阶段处理的并不是顶点和片元这类图形
+数据，而是应用程序给定范围的内容。计算着色器在应用程序中可以处理其他着色器程序
+所创建和使用的缓存数据。这其中也包括帧缓存的后处理效果，或者我们所期望的任何事
+物。
+
+GLSL 是一种强类型语言，所有变量都必须事先声明，并且要给出变量的类型
+所有变量都必须在声明的同时进行初始化
+
+int --> uint
+int, uint --> float
+int, uint, float --> double
+上面的隐式类型转换适用于这些类型的标量、向量以及矩阵。
+转换不会改变向量或者矩阵本身的形式，也不会改变它们的组成元素数量。类型转
+换不能应用于数组或者结构体之上。
+所有其他的数值转换都需要提供显式的转换构造函数,eg:
+float f = 10.0;
+int ten = int(f);
 

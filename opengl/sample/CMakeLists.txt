@@ -30,8 +30,12 @@ include(${wxWidgets_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/third_party/include)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
-# set include search paths
-link_directories(${PROJECT_SOURCE_DIR}/third_party/lib)
+# set library search paths
+if(WIN32)
+  link_directories(${PROJECT_SOURCE_DIR}/third_party/win32/lib)
+elseif(UNIX)
+  link_directories(${PROJECT_SOURCE_DIR}/third_party/unix/lib)
+endif()
 
 # Close CRT secure warnings.
 add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
