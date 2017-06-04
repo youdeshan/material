@@ -25,3 +25,10 @@ How to compile freeglut?
    (will generate dynamic and static library as default)
 5. make
 6. make install
+
+MUST use freeglut/glew shared library to compile opengl app.
+If "cannot open shared object file" error happen, run the following command:
+0. ldd glApp
+1. cd third_party/unix/lib
+2. sudo ldconfig `pwd`
+4. ldconfig -p | grep freeglut

@@ -1,12 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 PROJECT(glApp)
 
-option(USING_STATIC_FREEGLUT "Using static freeglut library?" ON)
-if(USING_STATIC_FREEGLUT)
-    add_definitions(-DFREEGLUT_STATIC)
-	#add_definitions(-DGLEW_STATIC)
-endif(USING_STATIC_FREEGLUT)
-
 # Find Boost
 find_package(Boost)
 if(Boost_FOUND)
@@ -32,9 +26,15 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 
 # set library search paths
 if(WIN32)
-  link_directories(${PROJECT_SOURCE_DIR}/third_party/win32/lib)
+    option(USING_STATIC_FREEGLUT "Using static freeglut library?" ON)
+    if(USING_STATIC_FREEGLUT)
+        add_definitions(-DFREEGLUT_STATIC)
+	    #add_definitions(-DGLEW_STATIC)
+    endif(USING_STATIC_FREEGLUT)
+
+    link_directories(${PROJECT_SOURCE_DIR}/third_party/win32/lib)
 elseif(UNIX)
-  link_directories(${PROJECT_SOURCE_DIR}/third_party/unix/lib)
+    link_directories(${PROJECT_SOURCE_DIR}/third_party/unix/lib)
 endif()
 
 # Close CRT secure warnings.
