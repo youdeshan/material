@@ -257,3 +257,84 @@ int, uint, float --> double
 float f = 10.0;
 int ten = int(f);
 
+矩阵
+矩阵的指定需要遵循列主序的原则，也就是说，传入的数据将首先填充列，然后填充行（与C语言中的2维数组的初始化是相反的）
+eg: mat3 M = mat3(1.0, 2.0, 3.0
+                  4.0, 5.0, 6.0,
+                  7.0, 8.0, 9.0)
+生成的矩阵为:
+1.0 4.0 7.0
+2.0 5.0 8.0
+3.0 6.0 9.0
+矩阵可以以维数组的形式进行访问: vec3 zVec = M[2]; // 获取矩阵的第2列（4.0, 5.0, 6.0)
+
+多维数组相当于从数组中再创建数组,它的语法与 C 语言当中类似:
+float coeff[3][5]; // 一个大小为 3 的数组,其中包含了大小为 5 的多个数组
+
+2.3.2 存储限制符
+数据类型也可以通过一些修饰符来改变自己的行为。GLSL 中一共定义了 4 种全局范围内的修饰符
+const   将一个变量定义为只读形式。如果它初始化时用的是一个编译时常量,那么它本身也会成为编译时常量
+in      设置这个变量为着色器阶段的输入变量
+out     设置这个变量为着色器阶段的输出变量
+uniform 设置这个变量为用户应用程序传递给着色器的数据,它对于给定的图元而言是一个常量
+        在着色器运行之前,uniform修饰符可以指定一个在应用程序中设置好的变量，它不会在图元处理的过程中发生变化。
+        uniform 变量在所有可用的着色阶段之间都是共享的，它必须定义为全局变量。
+        任何类型的变量(包括结构体和数组)都可以设置为uniform变量。着色器无法写入到 uniform 变量,也无法改变它的值
+
+        GLSL 编译器会在链接着色器程序时创建一个uniform变量列表，如果需要设置应用程序中uniform变量的值，需要首先获得变量在列表中的索引：
+
+        GLint glGetUniformLocation(GLuint program, const char* name);
+        返回着色器程序中 uniform 变量 name 对应的索引值。name 是一个以 NULL 结尾的字
+符串,不存在空格。如果 name 与启用的着色器程序中的所有 uniform 变量都不相符,或者
+name 是一个内部保留的着色器变量名称(例如,以 gl_ 开头的变量),那么返回值为 - 1。
+name 可以是单一的变量名称、数组中的一个元素(此时 name 主要包含方括号以及
+对应的索引数字),或者结构体的域变量(设置 name 时,需要在结构体变量名称之后添加
+“ . ”符号,再添加域变量名称,并与着色器程序中的写法一致)。对于 uniform 变量数组,
+也可以只通过指定数组的名称来获取数组中的第一个元素(例如,直接用“ arrayName ”),
+或者也可以通过指定索引值来获取数组的第一个元素(例如,写作“ arrayName[0] ”)
+
+        当得到uniform变量的对应索引值之后, 我们就可以通过glUniform*()或者glUniformMatrix*() 系列函数来设置 uniform 变量的值：
+        void glUniform{1234}{fdi ui}(GLint location, TYPE value);
+        void glUniform{1234}{fdi ui}v(GLint location, GLsizei count, const TYPE* values);
+
+        void glUniformMatrix{234}{fd}v(GLint location, GLsizei count, GLboolean transpose,const GLfloat* values);
+        void glUniformMatrix{2x3,2x4,3x2,3x4,4x2,4x3}{fd}v(GLint location, GLsizei count,GLboolean transpose, const GLfloat* values);
+        对 于 glUniformMatrix{234}*() 系 列 函 数 来 说, 可 以 从 values 中 读 入 2×2、3×3或者 4×4 个值来构成矩阵。
+        对于 glUniformMatrix{2x3,2x4,3x2,3x4,4x2,4x3}*() 系列函数来说,可以从 values中读入对应矩阵维度的数值并构成矩阵。
+        如果 transpose 设置为 GL_TRUE,那么 values中的数据是以行主序的顺序读入的(与 C 语言中的数组类似),如果是 GL_FALSE,那么values 中的数据是以列主序的顺序读入的
+        
+
+buffer  设置应用程序共享的一块可读写的内存， 这块内存也作为着色器中的存储缓存（storage buffer）使用
+        buffer 修饰符指定随后的块作为着色器与应用程序共享的一块内存缓存。这块缓存对于着色器来说是可读的也是可写的。缓存的大小可以在着色器编译和程序链接完成后设置
+
+shared  设置变量是本地工作组(local work group)中共享的。它只能用于计算着色器中
+
+2.3.3 语句
+着色器的真正工作是计算数值以及完成一些决策工作
+
+流控制语句 
+break/continue/return/discard
+discard -- 丢弃当前的片元,终止着色器的执行。discard语句只能用于片元着色器中
+
+用户自定义函数可以在单个着色器对象中定义,然后在多个着色器程序中复用
+
+声明
+函数声明语法与C语言非常类似,只是变量名需要添加访问修饰符
+returnType functionName([accessModifier] type1 variable1, [accessModifier] type2 varaible2,...)
+{}
+
+参数限制符 -- in / const in/ out/ inout
+尽管 GLSL 中的函数可以在运行后修改和返回数据,但是它与“ C ”或者 C++ 不同,并没有指针或者引用的概念
+
+2.3.4 计算的不变性
+GLSL 有两种方法来确保着色器之间的计算不变性,即invariant 或者 precise 关键字,但它们都只能影响到图形设备中的计算结果
+这两种方法都需要在图形设备上完成计算过程,来确保同一表达式的结果可以保证重复性(不变性)
+
+invariant限制符可以设置任何着色器的输出变量
+它可以确保如果两个着色器的输出变量使用了同样的表达式,并且表达式中的变量也是相同值,那么计算产生的结果也是相同的
+#pragma STDGL invariant(all)
+全局都设置为invariant可以帮助我们解决调试问题，但这样对于着色器的性能也会有所影响。而为了保证不变性,通常也会导致编译器所执行的一些优化工作被迫停止
+
+precise限制符可以设置内置变量、用户变量,或者函数的返回值
+它的用途并不是增加数据精度,而是增加计算的可复用性。我们通常在细分着色器中用它来避免造成几何体形状的裂缝
+总体上说,如果必须保证某个表达式产生的结果是一致的,即使表达式中的数据发生了变化(但是在数学上并不影响结果)也是如此,那么此时我们应该使用precise 而非invariant
