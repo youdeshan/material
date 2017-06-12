@@ -32,3 +32,5 @@ If "cannot open shared object file" error happen, run the following command:
 1. cd third_party/unix/lib
 2. sudo ldconfig `pwd`
 4. ldconfig -p | grep freeglut
+
+https://learnopengl-cn.github.io
