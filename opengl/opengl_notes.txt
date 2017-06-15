@@ -2,6 +2,9 @@
  it's part of the graphics drivers and your program must use 
  whatever OpenGL version is installed on the user's machine。
 
+OpenGL只是一个标准/规范，具体的实现是由驱动开发商针对特定显卡实现的
+OpenGL的竞争对手是Direct3D；OpenGL对应的开源实现是mesa 3D。
+ 
 OpenGL 是一种应用程序编程接口（Application Programming Interface, API），它是一种
 可以对图形硬件设备特性进行访问的软件库
 
