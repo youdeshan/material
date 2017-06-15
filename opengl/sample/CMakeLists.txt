@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 PROJECT(glApp)
 
+include("${PROJECT_SOURCE_DIR}/macro.cmake")
+
 # Find Boost
 find_package(Boost)
 if(Boost_FOUND)
@@ -26,16 +28,21 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 
 # set library search paths
 if(WIN32)
-    option(USING_STATIC_FREEGLUT "Using static freeglut library?" ON)
+    option(USING_STATIC_FREEGLUT "Using static freeglut library?" OFF)
     if(USING_STATIC_FREEGLUT)
         add_definitions(-DFREEGLUT_STATIC)
-	    #add_definitions(-DGLEW_STATIC)
     endif(USING_STATIC_FREEGLUT)
+	
+	option(USING_STATIC_GLFW "Using static glfw library?" ON)
+    if(USING_STATIC_GLFW)
+        #add_definitions(-DGLFW_STATIC)
+    endif(USING_STATIC_GLFW)
 
     link_directories(${PROJECT_SOURCE_DIR}/third_party/win32/lib)
 elseif(UNIX)
     link_directories(${PROJECT_SOURCE_DIR}/third_party/unix/lib)
 endif()
+#add_definitions(-DGLEW_STATIC)
 
 # Close CRT secure warnings.
 add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)

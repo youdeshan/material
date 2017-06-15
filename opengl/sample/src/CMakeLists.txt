@@ -4,6 +4,7 @@ set (app_srcs
 source_group(app FILES ${app_srcs})
 set (srcs ${srcs} ${app_srcs})
 	
+if(UNIX)
 set (LINK_LIBS
 	${wxWidgets_LIBRARIES}
 
@@ -14,8 +15,20 @@ set (LINK_LIBS
     m
     freeglut
     GLEW
-	)
+)
+elseif(WIN32)
+set (LINK_LIBS
+     ${wxWidgets_LIBRARIES}
+	 glfw3
+
+	 debug glew32d
+     optimized glew32
+)
+endif()
 	
 # add the executable
 ADD_EXECUTABLE (glApp ${srcs} )
-ARGET_LINK_LIBRARIES (glApp  ${LINK_LIBS})
+TARGET_LINK_LIBRARIES (glApp  ${LINK_LIBS})
+
+configure_files("${CMAKE_SOURCE_DIR}/third_party/win32/bin/debug" "${CMAKE_CURRENT_BINARY_DIR}/debug")
+configure_files("${CMAKE_SOURCE_DIR}/third_party/win32/bin/release" "${CMAKE_CURRENT_BINARY_DIR}/release")
