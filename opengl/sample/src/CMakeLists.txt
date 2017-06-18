@@ -8,12 +8,16 @@ if(UNIX)
 set (LINK_LIBS
 	${wxWidgets_LIBRARIES}
 
-    X11
-    Xxf86vm
-    Xrandr
-    GL
+    #X11
+    #Xxf86vm
+    #Xrandr
+    #GL
+    #m
+    #freeglut
+    rt
     m
-    freeglut
+    dl
+    glfw3
     GLEW
 )
 elseif(WIN32)

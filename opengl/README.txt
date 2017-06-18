@@ -26,7 +26,26 @@ How to compile freeglut?
 5. make
 6. make install
 
-MUST use freeglut/glew shared library to compile opengl app.
+How to compile glfw?
+1. sudo apt install xorg-dev
+2. mkdir build, cd build
+3. ccmake ..
+4. configure the cmake
+   BUILD_SHARED_LIBS = TRUE
+   CMAKE_BUILD_TYPE = Release
+   CMAKE_INSTALL_PREFIX = ~/install
+5. make
+6. make install
+
+For Windows:
+  freeglut -- static lib
+  glfw     -- static lib
+  glew     -- shared(dll)
+
+For linux:
+  freeglut -- shared(so)
+  glew     -- shared(so)
+
 If "cannot open shared object file" error happen, run the following command:
 0. ldd glApp
 1. cd third_party/unix/lib
@@ -34,3 +53,4 @@ If "cannot open shared object file" error happen, run the following command:
 4. ldconfig -p | grep freeglut
 
 https://learnopengl-cn.github.io
+http://www.lurklurk.org/linkers/linkers.html
