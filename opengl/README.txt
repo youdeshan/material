@@ -38,13 +38,13 @@ How to compile glfw?
 6. make install
 
 For Windows:
-  freeglut -- static lib
-  glfw     -- static lib
-  glew     -- shared(dll)
+  freeglut -- static lib(not used)
+  glfw     -- shared lib(dll)
+  glew     -- shared lib(dll)
 
 For linux:
-  freeglut -- shared(so)
-  glew     -- shared(so)
+  freeglut -- shared lib(so)
+  glew     -- shared lib(so)
 
 If "cannot open shared object file" error happen, run the following command:
 0. ldd glApp

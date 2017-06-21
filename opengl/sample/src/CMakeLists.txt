@@ -23,7 +23,7 @@ set (LINK_LIBS
 elseif(WIN32)
 set (LINK_LIBS
      ${wxWidgets_LIBRARIES}
-	 glfw3
+	 glfw3dll
 
 	 debug glew32d
      optimized glew32
