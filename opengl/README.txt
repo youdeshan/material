@@ -45,6 +45,7 @@ For Windows:
 For linux:
   freeglut -- shared lib(so)
   glew     -- shared lib(so)
+  glfw     -- shared lib(so)
 
 If "cannot open shared object file" error happen, run the following command:
 0. ldd glApp

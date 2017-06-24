@@ -39,8 +39,6 @@ if(WIN32)
     endif(USING_STATIC_GLFW)
 
     link_directories(${PROJECT_SOURCE_DIR}/third_party/win32/lib)
-elseif(UNIX)
-    link_directories(${PROJECT_SOURCE_DIR}/third_party/unix/lib)
 endif()
 #add_definitions(-DGLEW_STATIC)
 
