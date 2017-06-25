@@ -1,5 +1,6 @@
 set (app_srcs
 	app/main.cpp
+    glad/glad.c
 	)
 source_group(app FILES ${app_srcs})
 set (srcs ${srcs} ${app_srcs})
@@ -15,8 +16,9 @@ set (LINK_LIBS
     #GL
     #m
     #freeglut
+    dl
     glfw
-    GLEW
+    #    GLEW
 )
 file(COPY "${CMAKE_SOURCE_DIR}/third_party/unix/lib/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 elseif(WIN32)

@@ -1,5 +1,8 @@
 www.cnblogs.com/liangliangh/p/3521381.html
 
+opengl info:
+glxinfo | grep -i opengl
+
 How to compile glew?
 1. sudo apt install libgl-dev
 2. cd build
