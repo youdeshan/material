@@ -1,9 +1,10 @@
-set (app_srcs
-	app/main.cpp
+set (srcs
+    app/main.cpp
     glad/glad.c
+	utils/shader_util.h
+	utils/shader_util.cpp
 	)
-source_group(app FILES ${app_srcs})
-set (srcs ${srcs} ${app_srcs})
+source_group_by_dir(srcs)
 	
 if(UNIX)
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
@@ -26,8 +27,8 @@ set (LINK_LIBS
      ${wxWidgets_LIBRARIES}
 	 glfw3dll
 
-	 debug glew32d
-     optimized glew32
+#	 debug glew32d
+#     optimized glew32
 )
 configure_files("${CMAKE_SOURCE_DIR}/third_party/win32/bin/debug" "${CMAKE_CURRENT_BINARY_DIR}/debug")
 configure_files("${CMAKE_SOURCE_DIR}/third_party/win32/bin/release" "${CMAKE_CURRENT_BINARY_DIR}/release")

@@ -36,6 +36,19 @@
 //  glFlush();
 //}
 
+#include <fstream>
+void test() {
+    std::ifstream ifs("D:\\aaa.txt", std::ifstream::in);
+    if (!ifs.good()) {
+      std::cout << "failed to open file" << std::endl;
+    }
+    std::string str((std::istreambuf_iterator<char>(ifs)),
+      std::istreambuf_iterator<char>());
+    OutputDebugStringA(str.c_str());
+    ifs.close();
+    return;
+}
+
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT= 600;
 
@@ -50,6 +63,8 @@ void ProcessInput(GLFWwindow* win) {
 }
 
 int main(int argc, char* argv[]) {
+  test();
+
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
