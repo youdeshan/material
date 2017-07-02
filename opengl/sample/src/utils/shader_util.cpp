@@ -1,12 +1,13 @@
 #include "utils/shader_util.h"
 #include <fstream>
 
+/*
 static std::string ReadShader(const std::string& file_path) {
   std::ifstream ifs(file_path, std::ifstream::in);
   if (!ifs.good()) return "";
 
   return std::string(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
-}
+}*/
 
 static const GLchar* ReadShader(const char* file_name) {
 #ifdef WIN32
@@ -58,14 +59,14 @@ GLuint LoadShaders(ShaderInfo* shaders) {
     GLint compiled;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
     if (!compiled) {
-#ifdef _DEBUG
+//#ifdef _DEBUG
       GLsizei len;
       glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
       GLchar* log = new GLchar[len + 1];
       glGetShaderInfoLog(shader, len, &len, log);
       //std::cerr << "Shader compilation failed: " << log << std::endl;
       delete[] log;
-#endif
+//#endif
       return 0;
     }
     glAttachShader(program, shader);
@@ -84,10 +85,12 @@ GLuint LoadShaders(ShaderInfo* shaders) {
       //std::cerr << "Shader compilation failed: " << log << std::endl;
       delete[] log;
 #endif
-      for (entry = shaders; entry->type_ != GL_NONE; ++entry) {
-        glDeleteShader(entry->shader_);
-        entry->shader_ = 0;
-      }
+  }
+  
+  // Delete shaders after link program
+  for (entry = shaders; entry->type_ != GL_NONE; ++entry) {
+    glDeleteShader(entry->shader_);
+    entry->shader_ = 0;
   }
   return program;
 }

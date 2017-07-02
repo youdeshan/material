@@ -22,6 +22,7 @@ set (LINK_LIBS
     #    GLEW
 )
 file(COPY "${CMAKE_SOURCE_DIR}/third_party/unix/lib/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/glsl/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 elseif(WIN32)
 set (LINK_LIBS
      ${wxWidgets_LIBRARIES}
