@@ -26,6 +26,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "utils/shader_util.h"
 //void Display() {
 //  glClear(GL_COLOR_BUFFER_BIT);
 //  glBegin(GL_TRIANGLES);
@@ -49,6 +50,12 @@ void test() {
     return;
 }
 
+ShaderInfo shaders[] = {
+  { GL_VERTEX_SHADER, "triangles.vert" },
+  { GL_FRAGMENT_SHADER, "triangles.frag" },
+  { GL_NONE, NULL }
+};
+
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT= 600;
 
@@ -63,7 +70,7 @@ void ProcessInput(GLFWwindow* win) {
 }
 
 int main(int argc, char* argv[]) {
-  test();
+  //test();
 
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -91,6 +98,7 @@ int main(int argc, char* argv[]) {
 //    std::cout << "Failed to initialize GLEW!" << std::endl;
 //    return -1;
 //  }
+  GLuint program = LoadShaders(shaders);
 
 
   while (!glfwWindowShouldClose(win)) {

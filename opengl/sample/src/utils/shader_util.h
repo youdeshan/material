@@ -2,6 +2,15 @@
 #define SHADER_UTIL_H_
 #include <string>
 
-std::string load_shader_source(const std::string& file_path);
+#include <glad/glad.h>
+
+typedef struct {
+  GLenum type_;
+  const char* file_name_;
+  GLuint shader_;
+} ShaderInfo;
+
+GLuint LoadShaders(ShaderInfo* shaders);
+
 
 #endif //SHADER_UTIL_H_
