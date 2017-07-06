@@ -3,6 +3,8 @@ set (srcs
     glad/glad.c
 	utils/shader_util.h
 	utils/shader_util.cpp
+	glsl/triangles.vert
+	glsl/triangles.frag
 	)
 source_group_by_dir(srcs)
 	
@@ -33,6 +35,8 @@ set (LINK_LIBS
 )
 configure_files("${CMAKE_SOURCE_DIR}/third_party/win32/bin/debug" "${CMAKE_CURRENT_BINARY_DIR}/debug")
 configure_files("${CMAKE_SOURCE_DIR}/third_party/win32/bin/release" "${CMAKE_CURRENT_BINARY_DIR}/release")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/glsl/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/glsl/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/release")
 endif()
 	
 # add the executable
