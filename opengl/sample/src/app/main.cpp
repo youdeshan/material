@@ -21,6 +21,7 @@
 //  return 0;
 //}
 #include <iostream>
+#include <cmath>
 
 //#include <GL/glew.h>
 #include <glad/glad.h>
@@ -109,16 +110,19 @@ int main(int argc, char* argv[]) {
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
   glEnableVertexAttribArray(0);
 
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+  //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+  //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   // Remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO
-  // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   // Draw in wireframe polygons
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   // Cull face
   //glEnable(GL_CULL_FACE);
@@ -131,13 +135,21 @@ int main(int argc, char* argv[]) {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // Be sure to activate the shader before any calls to glUniform
     glUseProgram(program);
     glBindVertexArray(VAO);
+
+    // Update shader uniform, app exchanges data with shader by uniform
+    GLfloat time_val = glfwGetTime();
+    GLfloat green_val = sin(time_val) / 2.0f + 0.5f;
+    GLint vertex_loc = glGetUniformLocation(program, "ourColor");
+    glUniform4f(vertex_loc, 0.0f, green_val, 0.0f, 1.0f);
 
     // Draw triangles by vertex
     //glDrawArrays(GL_TRIANGLES, 0, 3);
     
     // Draw triangles by indices
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
     glfwSwapBuffers(win);
