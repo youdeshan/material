@@ -39,6 +39,11 @@ if(WIN32)
     endif(USING_STATIC_GLFW)
 
     link_directories(${PROJECT_SOURCE_DIR}/third_party/win32/lib)
+elseif(UNIX)
+    # UNIX will not define _DEBUG as default
+    if(CMAKE_BUILD_TYPE STREQUAL Debug)
+        add_definitions(-D_DEBUG)
+    endif()
 endif()
 #add_definitions(-DGLEW_STATIC)
 

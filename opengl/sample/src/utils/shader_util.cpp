@@ -1,5 +1,6 @@
 #include "utils/shader_util.h"
 #include <fstream>
+#include <iostream>
 
 /*
 static std::string ReadShader(const std::string& file_path) {
@@ -19,7 +20,7 @@ static const GLchar* ReadShader(const char* file_name) {
 
   if (!infile) {
 #ifdef _DEBUG
-    //std::cerr << "Unable to open file '" << file_name << "'" << std::endl;
+    std::cerr << "Unable to open file '" << file_name << "'" << std::endl;
 #endif
     return NULL;
   }
@@ -59,14 +60,14 @@ GLuint LoadShaders(ShaderInfo* shaders) {
     GLint compiled;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
     if (!compiled) {
-//#ifdef _DEBUG
+#ifdef _DEBUG
       GLsizei len;
       glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
       GLchar* log = new GLchar[len + 1];
       glGetShaderInfoLog(shader, len, &len, log);
-      //std::cerr << "Shader compilation failed: " << log << std::endl;
+      std::cerr << "Shader compilation failed: " << log << std::endl;
       delete[] log;
-//#endif
+#endif
       return 0;
     }
     glAttachShader(program, shader);
@@ -82,7 +83,7 @@ GLuint LoadShaders(ShaderInfo* shaders) {
       glGetProgramiv(program, GL_INFO_LOG_LENGTH, &len);
       GLchar* log = new GLchar[len + 1];
       glGetProgramInfoLog(program, len, &len, log);
-      //std::cerr << "Shader compilation failed: " << log << std::endl;
+      std::cerr << "Program link failed: " << log << std::endl;
       delete[] log;
 #endif
   }
