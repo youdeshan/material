@@ -1,6 +1,7 @@
 set (srcs
     app/main.cpp
     glad/glad.c
+	stb/stb_image_impl.cpp
 	utils/shader_util.h
 	utils/shader_util.cpp
 	glsl/triangles.vert
