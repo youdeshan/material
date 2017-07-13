@@ -1,6 +1,9 @@
-#include "utils/shader_util.h"
+#include "shader/shader_util.h"
+
 #include <fstream>
 #include <iostream>
+
+#include "shader/shader_info.h"
 
 /*
 static std::string ReadShader(const std::string& file_path) {

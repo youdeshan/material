@@ -1,9 +1,12 @@
 set (srcs
     app/main.cpp
     glad/glad.c
+	shader/shader_program.cpp
+	shader/shader_program.h
+	shader/shader_info.h
+	shader/shader_util.h
+	shader/shader_util.cpp
 	stb/stb_image_impl.cpp
-	utils/shader_util.h
-	utils/shader_util.cpp
 	glsl/triangles.vert
 	glsl/triangles.frag
 	)
@@ -25,7 +28,8 @@ set (LINK_LIBS
     #    GLEW
 )
 file(COPY "${CMAKE_SOURCE_DIR}/third_party/unix/lib/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/glsl/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/glsl" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/resources" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 elseif(WIN32)
 set (LINK_LIBS
      ${wxWidgets_LIBRARIES}
@@ -36,8 +40,10 @@ set (LINK_LIBS
 )
 configure_files("${CMAKE_SOURCE_DIR}/third_party/win32/bin/debug" "${CMAKE_CURRENT_BINARY_DIR}/debug")
 configure_files("${CMAKE_SOURCE_DIR}/third_party/win32/bin/release" "${CMAKE_CURRENT_BINARY_DIR}/release")
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/glsl/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
-file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/glsl/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/release")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/glsl" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/glsl" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/release")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/resources" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/resources" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/release")
 endif()
 	
 # add the executable
