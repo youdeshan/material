@@ -49,6 +49,7 @@ ShaderInfo shaders[] = {
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT= 600;
+GLfloat mixValue = 0.2f;
 
 void framebuffer_size_callback(GLFWwindow* win, int width, int height) {
     glViewport(0, 0, width, height);
@@ -57,6 +58,16 @@ void framebuffer_size_callback(GLFWwindow* win, int width, int height) {
 void ProcessInput(GLFWwindow* win) {
     if (glfwGetKey(win, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(win, true);
+    }
+    if (glfwGetKey(win, GLFW_KEY_UP) == GLFW_PRESS) {
+      mixValue += 0.001f;
+      if (mixValue >= 1.0f)
+        mixValue = 1.0f;
+    }
+    if (glfwGetKey(win, GLFW_KEY_DOWN) == GLFW_PRESS) {
+      mixValue -= 0.001f;
+      if (mixValue <= 0.0f)
+        mixValue = 0.0f;
     }
 }
 
@@ -89,6 +100,10 @@ int main(int argc, char* argv[]) {
 //  }
   ShaderProgram program(shaders);
   GLfloat vertices[] = {
+      //0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 2.0f, 2.0f,// top right
+      //0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 2.0f, 0.0f,// bottom right
+      //-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// bottom left
+      //-0.5f, 0.5f, 0.0f, 1.0f, 0.5f, 0.0f ,0.0f, 2.0f// top left
       0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,// top right
       0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,// bottom right
       -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// bottom left
@@ -133,8 +148,12 @@ int main(int argc, char* argv[]) {
   GLuint texture0;
   glGenTextures(1, &texture0);
   glBindTexture(GL_TEXTURE_2D, texture0);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  //GLfloat border_color[] = { 1.0f, 1.0f, 0.0f, 1.0f };
+  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+  //glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border_color);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   GLint width, height, nrChannels;
@@ -153,6 +172,7 @@ int main(int argc, char* argv[]) {
   GLuint texture1;
   glGenTextures(1, &texture1);
   glBindTexture(GL_TEXTURE_2D, texture1);
+  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -188,6 +208,7 @@ int main(int argc, char* argv[]) {
 
     // Be sure to activate the shader before any calls to glUniform
     program.Use();
+    program.SetFloat("mixValue", mixValue);
     glBindVertexArray(VAO);
 
     // Bind textures on corresponding texture units
@@ -216,6 +237,7 @@ int main(int argc, char* argv[]) {
   glDeleteBuffers(1, &VBO);
   glDeleteBuffers(1, &EBO);
   glDeleteTextures(1, &texture0);
+  glDeleteTextures(1, &texture1);
 
   glfwTerminate();
   return 0;
