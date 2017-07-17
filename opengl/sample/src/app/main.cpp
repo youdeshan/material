@@ -27,6 +27,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb/stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "shader/shader_program.h"
 #include "shader/shader_info.h"
@@ -191,6 +194,12 @@ int main(int argc, char* argv[]) {
   program.Use();
   program.SetInt("texture0", 0);
   program.SetInt("texture1", 1);
+
+  glm::mat4 trans;
+  trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
+  trans = glm::translate(trans, glm::vec3(-0.5f, 0.0f, 0.0f));
+  //trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+  program.SetMatrix4("transform", glm::value_ptr(trans));
 
   // Draw in wireframe polygons
   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

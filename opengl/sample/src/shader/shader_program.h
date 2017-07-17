@@ -12,9 +12,10 @@ public:
   ShaderProgram(ShaderInfo* shader_info);
 
   void Use();
-  void SetBool(const std::string &name, bool value) const;
-  void SetInt(const std::string &name, int value) const;
-  void SetFloat(const std::string &name, float value) const;
+  void SetBool(const std::string& name, GLboolean value) const;
+  void SetInt(const std::string& name, GLint value) const;
+  void SetFloat(const std::string& name, GLfloat value) const;
+  void SetMatrix4(const std::string& name, const GLfloat* value);
 
 private:
   GLuint id_;
