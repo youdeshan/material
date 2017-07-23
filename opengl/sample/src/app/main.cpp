@@ -27,6 +27,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb/stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "shader/shader_program.h"
 #include "shader/shader_info.h"
@@ -104,10 +107,10 @@ int main(int argc, char* argv[]) {
       //0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 2.0f, 0.0f,// bottom right
       //-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// bottom left
       //-0.5f, 0.5f, 0.0f, 1.0f, 0.5f, 0.0f ,0.0f, 2.0f// top left
-      0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,// top right
-      0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,// bottom right
-      -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// bottom left
-      -0.5f, 0.5f, 0.0f, 1.0f, 0.5f, 0.0f ,0.0f, 1.0f// top left
+      0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,// top right
+      0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,// bottom right
+      -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// bottom left
+      -1.0f, 0.0f, 0.0f, 1.0f, 0.5f, 0.0f ,0.0f, 1.0f// top left
   };
 
   GLuint indices[] = {
@@ -200,6 +203,13 @@ int main(int argc, char* argv[]) {
   //glCullFace(GL_BACK);
   //glFrontFace(GL_CCW);
 
+    glBindVertexArray(VAO);
+    // Bind textures on corresponding texture units
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture0);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+
   while (!glfwWindowShouldClose(win)) {
     ProcessInput(win);
 
@@ -209,13 +219,12 @@ int main(int argc, char* argv[]) {
     // Be sure to activate the shader before any calls to glUniform
     program.Use();
     program.SetFloat("mixValue", mixValue);
-    glBindVertexArray(VAO);
 
-    // Bind textures on corresponding texture units
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture0);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture1);
+    glm::mat4 trans;
+    trans = glm::translate(trans, glm::vec3(-0.5, -0.5, 0.0));
+    trans = glm::rotate(trans, (GLfloat)glfwGetTime(),  glm::vec3(0.0f, .0f, 1.0f));
+    trans = glm::translate(trans, glm::vec3(0.5, 0.5, 0.0));
+    program.SetMatrix("transform", glm::value_ptr(trans));
 
     // Update shader uniform, app exchanges data with shader by uniform
     //GLfloat time_val = glfwGetTime();
@@ -229,6 +238,28 @@ int main(int argc, char* argv[]) {
     // Draw triangles by indices
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
+    trans = glm::mat4();
+    trans = glm::translate(trans, glm::vec3(0.5, 0.5, 0.0));
+    trans = glm::rotate(trans, (GLfloat)glfwGetTime(),  glm::vec3(0.0f, .0f, 1.0f));
+    trans = glm::translate(trans, glm::vec3(0.5, 0.5, 0.0));
+    program.SetMatrix("transform", glm::value_ptr(trans));
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    trans = glm::mat4();
+    trans = glm::translate(trans, glm::vec3(-0.5, 0.5, 0.0));
+    GLfloat scale_amount = sin(glfwGetTime());
+    trans = glm::scale(trans, glm::vec3(scale_amount, scale_amount, scale_amount));
+    trans = glm::translate(trans, glm::vec3(0.5, 0.5, 0.0));
+    program.SetMatrix("transform", &trans[0][0]);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    trans = glm::mat4();
+    trans = glm::translate(trans, glm::vec3(0.5, -0.5, 0.0));
+    trans = glm::scale(trans, glm::vec3(scale_amount, scale_amount, scale_amount));
+    trans = glm::translate(trans, glm::vec3(0.5, 0.5, 0.0));
+    program.SetMatrix("transform", &trans[0][0]);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
     glfwSwapBuffers(win);
     glfwPollEvents();
   }
