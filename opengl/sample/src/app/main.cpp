@@ -220,17 +220,21 @@ int main(int argc, char* argv[]) {
     program.Use();
     program.SetFloat("mixValue", mixValue);
 
-    glm::mat4 trans;
-    trans = glm::translate(trans, glm::vec3(-0.5, -0.5, 0.0));
-    trans = glm::rotate(trans, (GLfloat)glfwGetTime(),  glm::vec3(0.0f, .0f, 1.0f));
-    trans = glm::translate(trans, glm::vec3(0.5, 0.5, 0.0));
-    program.SetMatrix("transform", glm::value_ptr(trans));
+    glm::mat4 model;
+    glm::mat4 view;
+    glm::mat4 projection;
+    //model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::translate(model, glm::vec3(0.5, 0.5, 0.0));
+    program.SetMatrix("model", glm::value_ptr(model));
 
-    // Update shader uniform, app exchanges data with shader by uniform
-    //GLfloat time_val = glfwGetTime();
-    //GLfloat green_val = sin(time_val) / 2.0f + 0.5f;
-    //GLint vertex_loc = glGetUniformLocation(program, "ourColor");
-    //glUniform4f(vertex_loc, 0.0f, green_val, 0.0f, 1.0f);
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -0.0f));
+    //view = glm::rotate(view, glm::radians(-89.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    program.SetMatrix("view", glm::value_ptr(view));
+
+    //projection = glm::perspective(glm::radians(45.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
+    //projection = glm::translate(projection, glm::vec3(-0.5f, 0.0f, 0.0f));
+    //program.SetMatrix("projection", glm::value_ptr(projection));
 
     // Draw triangles by vertex
     //glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -238,28 +242,6 @@ int main(int argc, char* argv[]) {
     // Draw triangles by indices
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
-    trans = glm::mat4();
-    trans = glm::translate(trans, glm::vec3(0.5, 0.5, 0.0));
-    trans = glm::rotate(trans, (GLfloat)glfwGetTime(),  glm::vec3(0.0f, .0f, 1.0f));
-    trans = glm::translate(trans, glm::vec3(0.5, 0.5, 0.0));
-    program.SetMatrix("transform", glm::value_ptr(trans));
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-    trans = glm::mat4();
-    trans = glm::translate(trans, glm::vec3(-0.5, 0.5, 0.0));
-    GLfloat scale_amount = sin(glfwGetTime());
-    trans = glm::scale(trans, glm::vec3(scale_amount, scale_amount, scale_amount));
-    trans = glm::translate(trans, glm::vec3(0.5, 0.5, 0.0));
-    program.SetMatrix("transform", &trans[0][0]);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-    trans = glm::mat4();
-    trans = glm::translate(trans, glm::vec3(0.5, -0.5, 0.0));
-    trans = glm::scale(trans, glm::vec3(scale_amount, scale_amount, scale_amount));
-    trans = glm::translate(trans, glm::vec3(0.5, 0.5, 0.0));
-    program.SetMatrix("transform", &trans[0][0]);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
     glfwSwapBuffers(win);
     glfwPollEvents();
   }

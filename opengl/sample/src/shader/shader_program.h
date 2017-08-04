@@ -10,6 +10,7 @@ typedef struct S_Info ShaderInfo;
 class ShaderProgram {
 public:
   ShaderProgram(ShaderInfo* shader_info);
+  GLuint id() { return id_; }
 
   void Use();
   void SetBool(const std::string& name, GLboolean value) const;
