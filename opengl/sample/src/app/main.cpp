@@ -223,18 +223,17 @@ int main(int argc, char* argv[]) {
     glm::mat4 model;
     glm::mat4 view;
     glm::mat4 projection;
-    //model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     model = glm::translate(model, glm::vec3(0.5, 0.5, 0.0));
     program.SetMatrix("model", glm::value_ptr(model));
 
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -0.0f));
-    //view = glm::rotate(view, glm::radians(-89.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     program.SetMatrix("view", glm::value_ptr(view));
 
-    //projection = glm::perspective(glm::radians(45.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
-    //projection = glm::translate(projection, glm::vec3(-0.5f, 0.0f, 0.0f));
-    //program.SetMatrix("projection", glm::value_ptr(projection));
+    // near = abs(center_z - cam_z) - len * sin(30) / 2
+    // far = abs(center_z - cam_z) + len * sin(30) / 2
+    projection = glm::perspective(glm::radians(45.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 2.79f, 3.22f); 
+    program.SetMatrix("projection", glm::value_ptr(projection));
 
     // Draw triangles by vertex
     //glDrawArrays(GL_TRIANGLES, 0, 3);
