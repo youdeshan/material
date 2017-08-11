@@ -1,29 +1,6 @@
-//#include <GL/glut.h>
-//
-//void Display() {
-//  glClear(GL_COLOR_BUFFER_BIT);
-//  glBegin(GL_TRIANGLES);
-//  glVertex3f(0.0f, 1.0f, 0.0f);
-//  glVertex3f(-1.0f, -1.0f, 0.0f);
-//  glVertex3f(1.0f, -1.0f, 0.0f);
-//  glEnd();
-//  glFlush();
-//}
-//
-//int main(int argc, char* argv[]) {
-//  glutInit(&argc, argv);
-//  glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
-//  glutInitWindowPosition(100, 100);
-//  glutInitWindowSize(400, 400);
-//  glutCreateWindow("Hello world!");
-//  glutDisplayFunc(&Display);
-//  glutMainLoop();
-//  return 0;
-//}
 #include <iostream>
 #include <cmath>
 
-//#include <GL/glew.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb/stb_image.h>
@@ -33,16 +10,6 @@
 
 #include "shader/shader_program.h"
 #include "shader/shader_info.h"
-
-//void Display() {
-//  glClear(GL_COLOR_BUFFER_BIT);
-//  glBegin(GL_TRIANGLES);
-//  glVertex3f(0.0f, 1.0f, 0.0f);
-//  glVertex3f(-1.0f, -1.0f, 0.0f);
-//  glVertex3f(1.0f, -1.0f, 0.0f);
-//  glEnd();
-//  glFlush();
-//}
 
 ShaderInfo shaders[] = {
   { GL_VERTEX_SHADER, "glsl/triangles.vert" },
@@ -96,21 +63,55 @@ int main(int argc, char* argv[]) {
       return -1;
   }
 
-//  glewExperimental = GL_TRUE;
-//  if (glewInit() != GLEW_OK) {
-//    std::cout << "Failed to initialize GLEW!" << std::endl;
-//    return -1;
-//  }
   ShaderProgram program(shaders);
   GLfloat vertices[] = {
-      //0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 2.0f, 2.0f,// top right
-      //0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 2.0f, 0.0f,// bottom right
-      //-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// bottom left
-      //-0.5f, 0.5f, 0.0f, 1.0f, 0.5f, 0.0f ,0.0f, 2.0f// top left
-      0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,// top right
-      0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,// bottom right
-      -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// bottom left
-      -1.0f, 0.0f, 0.0f, 1.0f, 0.5f, 0.0f ,0.0f, 1.0f// top left
+    //-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+    //0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+    //0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    //0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    //-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    //-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+    //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    //0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    //0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    //0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    //-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+    //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+    //-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    //-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    //-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+    -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    //0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    //0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    //0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    //0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    //0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    //0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+    //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    //0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+    //0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    //0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+    //-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    //0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    //0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    //0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    //-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+    //-0.5f, 0.5f, -0.5f, 0.0f, 1.0f
   };
 
   GLuint indices[] = {
@@ -128,24 +129,21 @@ int main(int argc, char* argv[]) {
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT), (void*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GL_FLOAT), (void*)0);
   glEnableVertexAttribArray(0);
 
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT)));
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT)));
   glEnableVertexAttribArray(1);
 
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT), (void*)(6 * sizeof(GL_FLOAT)));
-  glEnableVertexAttribArray(2);
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+  //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+  //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   // Remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO
   // You should unbind the EBO after VAO is unbinded.
   // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
   // Load and create a texture0
   GLuint texture0;
@@ -210,11 +208,12 @@ int main(int argc, char* argv[]) {
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, texture1);
 
+  glEnable(GL_DEPTH_TEST);
   while (!glfwWindowShouldClose(win)) {
     ProcessInput(win);
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Be sure to activate the shader before any calls to glUniform
     program.Use();
@@ -223,23 +222,20 @@ int main(int argc, char* argv[]) {
     glm::mat4 model;
     glm::mat4 view;
     glm::mat4 projection;
-    model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::translate(model, glm::vec3(0.5, 0.5, 0.0));
+    model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
     program.SetMatrix("model", glm::value_ptr(model));
 
     view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     program.SetMatrix("view", glm::value_ptr(view));
 
-    // near = abs(center_z - cam_z) - len * sin(30) / 2
-    // far = abs(center_z - cam_z) + len * sin(30) / 2
-    projection = glm::perspective(glm::radians(45.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 2.79f, 3.22f); 
+    projection = glm::perspective(glm::radians(45.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f); 
     program.SetMatrix("projection", glm::value_ptr(projection));
 
     // Draw triangles by vertex
-    //glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
     
     // Draw triangles by indices
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
     glfwSwapBuffers(win);
     glfwPollEvents();
@@ -247,7 +243,7 @@ int main(int argc, char* argv[]) {
 
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
-  glDeleteBuffers(1, &EBO);
+  //glDeleteBuffers(1, &EBO);
   glDeleteTextures(1, &texture0);
   glDeleteTextures(1, &texture1);
 
