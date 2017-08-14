@@ -65,7 +65,6 @@ int main(int argc, char* argv[]) {
 
   ShaderProgram program(shaders);
   GLfloat vertices[] = {
-      /*
     -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -78,29 +77,16 @@ int main(int argc, char* argv[]) {
     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
     -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,*/
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
 
-    //-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    //-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    //-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    //-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    //-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-    -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    -0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    //-0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    //-0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
-    //-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-    //-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-    //-0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
-    //-0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-
-    /*0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
@@ -119,7 +105,7 @@ int main(int argc, char* argv[]) {
     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
     -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f*/
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
   };
 
   GLuint indices[] = {
@@ -131,7 +117,7 @@ int main(int argc, char* argv[]) {
   GLuint VAO, VBO, EBO;
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
-  glGenBuffers(1, &EBO);
+  //glGenBuffers(1, &EBO);
 
   glBindVertexArray(VAO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -140,7 +126,7 @@ int main(int argc, char* argv[]) {
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GL_FLOAT), (void*)0);
   glEnableVertexAttribArray(0);
 
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT)));
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT)));
   glEnableVertexAttribArray(1);
 
   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -230,19 +216,17 @@ int main(int argc, char* argv[]) {
     glm::mat4 model;
     glm::mat4 view;
     glm::mat4 projection;
-    //model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+    model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
     program.SetMatrix("model", glm::value_ptr(model));
 
-    //view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     program.SetMatrix("view", glm::value_ptr(view));
 
-    //projection = glm::perspective(glm::radians(45.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f); 
+    projection = glm::perspective(glm::radians(45.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f); 
     program.SetMatrix("projection", glm::value_ptr(projection));
 
     // Draw triangles by vertex
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
     
     // Draw triangles by indices
     //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
