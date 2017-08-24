@@ -88,6 +88,9 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
+GLfloat last_frame = 0.0f;
+GLfloat delta_time = 0.0f;
+
 void framebuffer_size_callback(GLFWwindow* win, int width, int height) {
     glViewport(0, 0, width, height);
 }
@@ -107,7 +110,8 @@ void ProcessInput(GLFWwindow* win) {
         mixValue = 0.0f;
     }
 
-    GLfloat camera_speed = 0.05f;
+    // The render time more long, the move speed more fast
+    GLfloat camera_speed = 2.5 * delta_time;
     if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS) {
       cameraPos += camera_speed * cameraFront;
     }
@@ -235,7 +239,15 @@ int main(int argc, char* argv[]) {
   glBindTexture(GL_TEXTURE_2D, texture1);
 
   glEnable(GL_DEPTH_TEST);
+
+  glm::mat4 projection;
+  projection = glm::perspective(glm::radians(45.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
+  program.SetMatrix("projection", glm::value_ptr(projection));
+
   while (!glfwWindowShouldClose(win)) {
+    GLfloat current_frame = glfwGetTime();
+    delta_time = current_frame - last_frame;
+    last_frame = current_frame;
     ProcessInput(win);
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -253,10 +265,6 @@ int main(int argc, char* argv[]) {
     //view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
     program.SetMatrix("view", glm::value_ptr(view));
-
-    glm::mat4 projection;
-    projection = glm::perspective(glm::radians(45.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
-    program.SetMatrix("projection", glm::value_ptr(projection));
 
     for (GLuint i = 0; i < 10; ++i) {
       glm::mat4 model;
