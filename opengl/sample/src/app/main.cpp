@@ -91,8 +91,41 @@ glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 GLfloat last_frame = 0.0f;
 GLfloat delta_time = 0.0f;
 
+GLboolean firstMove = true;
+GLfloat lastX = 400, lastY = 300;
+GLfloat yaw = 0, pitch = 0;
+GLfloat sensitivity = 0.05f;
+
 void framebuffer_size_callback(GLFWwindow* win, int width, int height) {
     glViewport(0, 0, width, height);
+}
+
+void mouse_callback(GLFWwindow* win, double xpos, double ypos) {
+  if (firstMove) {
+    lastX = xpos;
+    lastY = ypos;
+    firstMove = false;
+    return;
+  }
+  GLfloat offset_x = xpos - lastX;
+  GLfloat offset_y = lastY - ypos;
+
+  lastX = xpos;
+  lastY = ypos;
+  offset_x *= sensitivity;
+  offset_y *= sensitivity;
+
+  pitch += offset_y;
+  yaw += offset_x;
+  if (pitch > 89.0f) pitch = 89.0f;
+  if (pitch < -89.0f) pitch = -89.0f;
+
+  glm::vec3 front;
+  front.x = glm::cos(glm::radians(yaw)) * glm::cos(glm::radians(pitch));
+  front.y = glm::sin(glm::radians(pitch));
+  front.z = glm::sin(glm::radians(yaw)) * glm::cos(glm::radians(pitch));
+  cameraFront = glm::normalize(front);
+  printf("front-x: %.2f, front-y: %.2f, front-z: %.2f\n", cameraFront.x, cameraFront.y, cameraFront.z);
 }
 
 void ProcessInput(GLFWwindow* win) {
@@ -124,6 +157,13 @@ void ProcessInput(GLFWwindow* win) {
     if (glfwGetKey(win, GLFW_KEY_D) == GLFW_PRESS) {
       cameraPos += camera_speed * glm::normalize(glm::cross(cameraFront, cameraUp));
     }
+
+    // Reset to original position
+    if (glfwGetKey(win, GLFW_KEY_R) == GLFW_PRESS) {
+      cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+      cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+      printf("Restore to original pos!!!");
+    }
 }
 
 int main(int argc, char* argv[]) {
@@ -141,6 +181,8 @@ int main(int argc, char* argv[]) {
   }
   glfwMakeContextCurrent(win);
   glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
+  //glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  glfwSetCursorPosCallback(win, mouse_callback);
 
   // glad: load all opengl function pointers
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
