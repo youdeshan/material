@@ -93,14 +93,27 @@ GLfloat delta_time = 0.0f;
 
 GLboolean firstMove = true;
 GLfloat lastX = 400, lastY = 300;
-GLfloat yaw = 0, pitch = 0;
+GLfloat yaw = -90.0f, pitch = 0;
 GLfloat sensitivity = 0.05f;
+
+GLboolean mouse_down = false;
 
 void framebuffer_size_callback(GLFWwindow* win, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
+void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) {
+  if (button == GLFW_MOUSE_BUTTON_LEFT) {
+    mouse_down = action == GLFW_PRESS;
+    firstMove = mouse_down;
+  }
+}
+
 void mouse_callback(GLFWwindow* win, double xpos, double ypos) {
+  //int state = glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_LEFT);
+  //if (state != GLFW_PRESS) return;
+  if (!mouse_down) return;
+
   if (firstMove) {
     lastX = xpos;
     lastY = ypos;
@@ -162,7 +175,6 @@ void ProcessInput(GLFWwindow* win) {
     if (glfwGetKey(win, GLFW_KEY_R) == GLFW_PRESS) {
       cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
       cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-      printf("Restore to original pos!!!");
     }
 }
 
@@ -183,6 +195,7 @@ int main(int argc, char* argv[]) {
   glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
   //glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glfwSetCursorPosCallback(win, mouse_callback);
+  glfwSetMouseButtonCallback(win, mouse_button_callback);
 
   // glad: load all opengl function pointers
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
