@@ -98,6 +98,8 @@ GLfloat sensitivity = 0.05f;
 
 GLboolean mouse_down = false;
 
+GLfloat fov = 45.0f;
+
 void framebuffer_size_callback(GLFWwindow* win, int width, int height) {
     glViewport(0, 0, width, height);
 }
@@ -107,6 +109,15 @@ void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) {
     mouse_down = action == GLFW_PRESS;
     firstMove = mouse_down;
   }
+}
+
+void scroll_callback(GLFWwindow* win, double xoffset, double yoffset) {
+  if (fov >= 1.0f && fov <= 45.0f) {
+    fov -= yoffset;
+  }
+  if (fov < 1.0f) fov = 1.0f;
+  if (fov > 45.0f) fov = 45.0f;
+  printf("fov: %.2f\n", fov);
 }
 
 void mouse_callback(GLFWwindow* win, double xpos, double ypos) {
@@ -196,6 +207,7 @@ int main(int argc, char* argv[]) {
   //glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glfwSetCursorPosCallback(win, mouse_callback);
   glfwSetMouseButtonCallback(win, mouse_button_callback);
+  glfwSetScrollCallback(win, scroll_callback);
 
   // glad: load all opengl function pointers
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -295,10 +307,6 @@ int main(int argc, char* argv[]) {
 
   glEnable(GL_DEPTH_TEST);
 
-  glm::mat4 projection;
-  projection = glm::perspective(glm::radians(45.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
-  program.SetMatrix("projection", glm::value_ptr(projection));
-
   while (!glfwWindowShouldClose(win)) {
     GLfloat current_frame = glfwGetTime();
     delta_time = current_frame - last_frame;
@@ -311,6 +319,10 @@ int main(int argc, char* argv[]) {
     // Be sure to activate the shader before any calls to glUniform
     program.Use();
     program.SetFloat("mixValue", mixValue);
+
+    glm::mat4 projection;
+    projection = glm::perspective(glm::radians(fov), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
+    program.SetMatrix("projection", glm::value_ptr(projection));
 
     glm::mat4 view;
     //GLfloat radius = 10.0f;
