@@ -6,6 +6,8 @@ set (srcs
 	shader/shader_info.h
 	shader/shader_util.h
 	shader/shader_util.cpp
+	camera/camera.h
+	camera/camera.cpp
 	stb/stb_image_impl.cpp
 	glsl/triangles.vert
 	glsl/triangles.frag

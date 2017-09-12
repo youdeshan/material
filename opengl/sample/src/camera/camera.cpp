@@ -10,25 +10,28 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, GLfloat pitch, GLfloat yaw)
   UpdateVectors();
 }
 
+Camera::~Camera() {
+}
+
 glm::mat4 Camera::GetViewMatrix() {
-  return glm::lookAt(position_, position_ + front_, up_); 
+  return glm::lookAt(position_, position_ + front_, up_);
 }
 
 void Camera::ProcessKeyboard(MoveDirection dir, GLfloat delta_time) {
   GLfloat velocity = move_speed_ * delta_time;
 
   switch (dir) {
-    case kForward:
-      position_ += velocity * front_;
-      break;
-    case kBackward:
-      position_ -= velocity * front_;
-      break;
-    case kLeft:
-      position_ -= velocity * right_;
-      break;
-    case kRight:
-      position_ += velocity * right_;
+  case kForward:
+    position_ += velocity * front_;
+    break;
+  case kBackward:
+    position_ -= velocity * front_;
+    break;
+  case kLeft:
+    position_ -= velocity * right_;
+    break;
+  case kRight:
+    position_ += velocity * right_;
   }
 }
 
@@ -52,15 +55,19 @@ void Camera::ProcessMouseScroll(GLfloat y_offset) {
   if (zoom_ >= 45.0f) zoom_ = 45.0f;
 }
 
+void Camera::Reset() {
+  position_ = glm::vec3(0.0f, 0.0f, 3.0f);
+  front_ = glm::vec3(0.0f, 0.0f, -1.0f);
+}
+
 void Camera::UpdateVectors() {
   glm::vec3 front;
   front.x = glm::cos(glm::radians(yaw_)) * glm::cos(glm::radians(pitch_));
   front.y = glm::sin(glm::radians(pitch_));
+
   front.z = glm::sin(glm::radians(yaw_)) * glm::cos(glm::radians(pitch_));
   front_ = glm::normalize(front);
 
   right_ = glm::normalize(glm::cross(front_, world_up_));
   up_ = glm::normalize(glm::cross(right_, front_));
 }
-
-

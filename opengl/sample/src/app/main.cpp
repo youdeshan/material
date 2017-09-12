@@ -10,6 +10,7 @@
 
 #include "shader/shader_program.h"
 #include "shader/shader_info.h"
+#include "camera/camera.h"
 
 ShaderInfo shaders[] = {
   { GL_VERTEX_SHADER, "glsl/triangles.vert" },
@@ -84,21 +85,15 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT= 600;
 GLfloat mixValue = 0.2f;
 
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
 GLfloat last_frame = 0.0f;
 GLfloat delta_time = 0.0f;
 
 GLboolean firstMove = true;
 GLfloat lastX = 400, lastY = 300;
-GLfloat yaw = -90.0f, pitch = 0;
-GLfloat sensitivity = 0.05f;
 
 GLboolean mouse_down = false;
-
-GLfloat fov = 45.0f;
 
 void framebuffer_size_callback(GLFWwindow* win, int width, int height) {
     glViewport(0, 0, width, height);
@@ -112,12 +107,7 @@ void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) {
 }
 
 void scroll_callback(GLFWwindow* win, double xoffset, double yoffset) {
-  if (fov >= 1.0f && fov <= 45.0f) {
-    fov -= yoffset;
-  }
-  if (fov < 1.0f) fov = 1.0f;
-  if (fov > 45.0f) fov = 45.0f;
-  printf("fov: %.2f\n", fov);
+  camera.ProcessMouseScroll(yoffset);
 }
 
 void mouse_callback(GLFWwindow* win, double xpos, double ypos) {
@@ -136,20 +126,8 @@ void mouse_callback(GLFWwindow* win, double xpos, double ypos) {
 
   lastX = xpos;
   lastY = ypos;
-  offset_x *= sensitivity;
-  offset_y *= sensitivity;
 
-  pitch += offset_y;
-  yaw += offset_x;
-  if (pitch > 89.0f) pitch = 89.0f;
-  if (pitch < -89.0f) pitch = -89.0f;
-
-  glm::vec3 front;
-  front.x = glm::cos(glm::radians(yaw)) * glm::cos(glm::radians(pitch));
-  front.y = glm::sin(glm::radians(pitch));
-  front.z = glm::sin(glm::radians(yaw)) * glm::cos(glm::radians(pitch));
-  cameraFront = glm::normalize(front);
-  printf("front-x: %.2f, front-y: %.2f, front-z: %.2f\n", cameraFront.x, cameraFront.y, cameraFront.z);
+  camera.ProcessMouseMovement(offset_x, offset_y);
 }
 
 void ProcessInput(GLFWwindow* win) {
@@ -168,24 +146,22 @@ void ProcessInput(GLFWwindow* win) {
     }
 
     // The render time more long, the move speed more fast
-    GLfloat camera_speed = 2.5 * delta_time;
     if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS) {
-      cameraPos += camera_speed * cameraFront;
+      camera.ProcessKeyboard(Camera::kForward, delta_time);
     }
     if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS) {
-      cameraPos -= camera_speed * cameraFront;
+      camera.ProcessKeyboard(Camera::kBackward, delta_time);
     }
     if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS) {
-      cameraPos += camera_speed * glm::normalize(glm::cross(cameraUp, cameraFront));
+      camera.ProcessKeyboard(Camera::kLeft, delta_time);
     }
     if (glfwGetKey(win, GLFW_KEY_D) == GLFW_PRESS) {
-      cameraPos += camera_speed * glm::normalize(glm::cross(cameraFront, cameraUp));
+      camera.ProcessKeyboard(Camera::kRight, delta_time);
     }
 
     // Reset to original position
     if (glfwGetKey(win, GLFW_KEY_R) == GLFW_PRESS) {
-      cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-      cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+      camera.Reset();
     }
 }
 
@@ -321,7 +297,7 @@ int main(int argc, char* argv[]) {
     program.SetFloat("mixValue", mixValue);
 
     glm::mat4 projection;
-    projection = glm::perspective(glm::radians(fov), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(camera.zoom()), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
     program.SetMatrix("projection", glm::value_ptr(projection));
 
     glm::mat4 view;
@@ -330,7 +306,7 @@ int main(int argc, char* argv[]) {
     //GLfloat camX = sin(angle) * radius;
     //GLfloat camZ = cos(angle) * radius;
     //view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+    view = camera.GetViewMatrix();
     program.SetMatrix("view", glm::value_ptr(view));
 
     for (GLuint i = 0; i < 10; ++i) {
