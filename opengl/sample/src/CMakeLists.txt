@@ -1,6 +1,12 @@
 set (srcs
-    app/main.cpp
-    glad/glad.c
+	app/app.cpp
+	app/app.h
+	app/main_frame.cpp
+	app/main_frame.h
+	app/gl_canvas.cpp
+	app/gl_canvas.h
+	
+	glad/glad.c
 	shader/shader_program.cpp
 	shader/shader_program.h
 	shader/shader_info.h
@@ -11,43 +17,38 @@ set (srcs
 	stb/stb_image_impl.cpp
 	glsl/triangles.vert
 	glsl/triangles.frag
+
+	drawing/render/renderer.h
+	drawing/render/renderer.cpp
+	drawing/render/gl_renderer.h
+	drawing/render/gl_renderer.cpp
+
+	drawing/context/context.h
+	drawing/context/gl_context.h
+	drawing/context/gl_context.cpp
+
+	drawing/scene/node.h
+	drawing/scene/graph.h
+	drawing/scene/graph.cpp
+	drawing/scene/drawable.h
+	drawing/scene/drawable.cpp
 	)
 source_group_by_dir(srcs)
-	
-if(UNIX)
-link_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 set (LINK_LIBS
 	${wxWidgets_LIBRARIES}
-
-    #X11
-    #Xxf86vm
-    #Xrandr
-    #GL
-    #m
-    #freeglut
-    dl
-    glfw
-    #    GLEW
 )
-file(COPY "${CMAKE_SOURCE_DIR}/third_party/unix/lib/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+
+if(UNIX)
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/glsl" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/resources" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 elseif(WIN32)
-set (LINK_LIBS
-     ${wxWidgets_LIBRARIES}
-	 glfw3dll
-
-#	 debug glew32d
-#     optimized glew32
-)
-configure_files("${CMAKE_SOURCE_DIR}/third_party/win32/bin/debug" "${CMAKE_CURRENT_BINARY_DIR}/debug")
-configure_files("${CMAKE_SOURCE_DIR}/third_party/win32/bin/release" "${CMAKE_CURRENT_BINARY_DIR}/release")
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/glsl" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/glsl" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/release")
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/resources" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/debug")
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/resources" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/release")
-endif()
+endif()	
 	
 # add the executable
-ADD_EXECUTABLE (glApp ${srcs} )
-TARGET_LINK_LIBRARIES (glApp  ${LINK_LIBS})
+ADD_EXECUTABLE (HelloGL WIN32 ${srcs} )
+TARGET_LINK_LIBRARIES (HelloGL  ${LINK_LIBS})

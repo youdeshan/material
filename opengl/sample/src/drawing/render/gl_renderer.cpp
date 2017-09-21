@@ -1,8 +1,7 @@
-#include <iostream>
-#include <cmath>
+#include "drawing/render/gl_renderer.h"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <iostream>
+//#include <glad/glad.h>
 #include <stb/stb_image.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -10,6 +9,9 @@
 
 #include "shader/shader_program.h"
 #include "shader/shader_info.h"
+#include "camera/camera.h"
+
+#include "drawing/context/context.h"
 
 ShaderInfo shaders[] = {
   { GL_VERTEX_SHADER, "glsl/triangles.vert" },
@@ -61,12 +63,6 @@ GLfloat vertices[] = {
   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
 
-GLuint indices[] = {
-  0, 1, 3,
-  //1, 2, 3
-  3, 2, 1
-};
-
 glm::vec3 cubePositions[] = {
   glm::vec3(0.0f,  0.0f,  0.0f),
   glm::vec3(2.0f,  5.0f, -15.0f),
@@ -80,60 +76,90 @@ glm::vec3 cubePositions[] = {
   glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT= 600;
-GLfloat mixValue = 0.2f;
 
-void framebuffer_size_callback(GLFWwindow* win, int width, int height) {
-    glViewport(0, 0, width, height);
+GLRenderer::GLRenderer(IContext* context) : IRenderer(context), program_(NULL), camera_(NULL), mix_val_(0.2) {
+  InitGL();
 }
 
-void ProcessInput(GLFWwindow* win) {
-    if (glfwGetKey(win, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(win, true);
-    }
-    if (glfwGetKey(win, GLFW_KEY_UP) == GLFW_PRESS) {
-      mixValue += 0.001f;
-      if (mixValue >= 1.0f)
-        mixValue = 1.0f;
-    }
-    if (glfwGetKey(win, GLFW_KEY_DOWN) == GLFW_PRESS) {
-      mixValue -= 0.001f;
-      if (mixValue <= 0.0f)
-        mixValue = 0.0f;
-    }
+GLRenderer::~GLRenderer() {
+  if (program_) delete program_;
+  program_ = NULL;
+
+  if (camera_) delete camera_;
+  camera_ = NULL;
 }
 
-int main(int argc, char* argv[]) {
-  glfwInit();
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+void GLRenderer::set_mix_val(GLfloat val) {
+  mix_val_ = val;
+  if (mix_val_ >= 1.0f) mix_val_ = 1.0f;
+  if (mix_val_ <= 0.0f) mix_val_ = 0.0f;
+}
 
-  GLFWwindow* win = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Hello opengl!", NULL, NULL);
-  if (win == NULL) {
-    std::cout << "Failed to create GLFW window!" << std::endl;
-    glfwTerminate();
-    return -1;
+void GLRenderer::Resize(int width, int height) {
+  win_size_[0] = width;
+  win_size_[1] = height;
+
+  context_->SetCurrent();
+  glViewport(0, 0, width, height);
+}
+
+void GLRenderer::Draw() {
+  context_->SetCurrent();
+
+  glBindVertexArray(vao_);
+  // Bind textures on corresponding texture units
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture0_);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, texture1_);
+
+  glEnable(GL_DEPTH_TEST);
+
+  glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  // Be sure to activate the shader before any calls to glUniform
+  program_->Use();
+  program_->SetFloat("mixValue", mix_val_);
+
+  glm::mat4 projection;
+  projection = glm::perspective(glm::radians(camera_->zoom()), (GLfloat) win_size_[0] / (GLfloat)win_size_[1], 0.1f, 100.0f);
+  program_->SetMatrix("projection", glm::value_ptr(projection));
+
+  glm::mat4 view;
+  view = camera_->GetViewMatrix();
+  program_->SetMatrix("view", glm::value_ptr(view));
+
+  for (GLuint i = 0; i < 10; ++i) {
+    glm::mat4 model;
+    model = glm::translate(model, cubePositions[i]);
+    //model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+    program_->SetMatrix("model", glm::value_ptr(model));
+
+    // Draw triangles by vertex
+    glDrawArrays(GL_TRIANGLES, 0, 36);
   }
-  glfwMakeContextCurrent(win);
-  glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
 
-  // glad: load all opengl function pointers
-  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-      std::cout << "Failed to initialize GLAD" << std::endl;
-      return -1;
+  // Draw triangles by indices
+  //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void GLRenderer::InitGL() {
+  context_->SetCurrent();
+
+  if (!gladLoadGL()) {
+    std::cout << "Failed to initialize GLAD" << std::endl;
+    return;
   }
+  program_ = new ShaderProgram(shaders);
+  camera_ = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
-  ShaderProgram program(shaders);
-
-  GLuint VAO, VBO, EBO;
-  glGenVertexArrays(1, &VAO);
+  GLuint VBO, EBO;
+  glGenVertexArrays(1, &vao_);
   glGenBuffers(1, &VBO);
   //glGenBuffers(1, &EBO);
 
-  glBindVertexArray(VAO);
+  glBindVertexArray(vao_);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
@@ -154,9 +180,8 @@ int main(int argc, char* argv[]) {
   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
   // Load and create a texture0
-  GLuint texture0;
-  glGenTextures(1, &texture0);
-  glBindTexture(GL_TEXTURE_2D, texture0);
+  glGenTextures(1, &texture0_);
+  glBindTexture(GL_TEXTURE_2D, texture0_);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   //GLfloat border_color[] = { 1.0f, 1.0f, 0.0f, 1.0f };
@@ -171,16 +196,16 @@ int main(int argc, char* argv[]) {
   if (data) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
-  } else {
+  }
+  else {
     std::cout << "Failed to load texture0." << std::endl;
   }
   stbi_image_free(data);
   glBindTexture(GL_TEXTURE_2D, 0);
 
   // Load and create a texture1
-  GLuint texture1;
-  glGenTextures(1, &texture1);
-  glBindTexture(GL_TEXTURE_2D, texture1);
+  glGenTextures(1, &texture1_);
+  glBindTexture(GL_TEXTURE_2D, texture1_);
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -191,15 +216,16 @@ int main(int argc, char* argv[]) {
     // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
-  } else {
+  }
+  else {
     std::cout << "Failed to load texture1." << std::endl;
   }
   stbi_image_free(data);
   glBindTexture(GL_TEXTURE_2D, 0);
 
-  program.Use();
-  program.SetInt("texture0", 0);
-  program.SetInt("texture1", 1);
+  program_->Use();
+  program_->SetInt("texture0", 0);
+  program_->SetInt("texture1", 1);
 
   // Draw in wireframe polygons
   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -208,56 +234,4 @@ int main(int argc, char* argv[]) {
   //glEnable(GL_CULL_FACE);
   //glCullFace(GL_BACK);
   //glFrontFace(GL_CCW);
-
-  glBindVertexArray(VAO);
-  // Bind textures on corresponding texture units
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, texture0);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, texture1);
-
-  glEnable(GL_DEPTH_TEST);
-  while (!glfwWindowShouldClose(win)) {
-    ProcessInput(win);
-
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // Be sure to activate the shader before any calls to glUniform
-    program.Use();
-    program.SetFloat("mixValue", mixValue);
-
-    glm::mat4 view;
-    glm::mat4 projection;
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-    program.SetMatrix("view", glm::value_ptr(view));
-
-    projection = glm::perspective(glm::radians(45.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
-    program.SetMatrix("projection", glm::value_ptr(projection));
-
-    for (GLuint i = 0; i < 10; ++i) {
-      glm::mat4 model;
-      model = glm::translate(model, cubePositions[i]);
-      model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-      program.SetMatrix("model", glm::value_ptr(model));
-
-      // Draw triangles by vertex
-      glDrawArrays(GL_TRIANGLES, 0, 36);
-    }
-    
-    // Draw triangles by indices
-    //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    
-    glfwSwapBuffers(win);
-    glfwPollEvents();
-  }
-
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteBuffers(1, &VBO);
-  //glDeleteBuffers(1, &EBO);
-  glDeleteTextures(1, &texture0);
-  glDeleteTextures(1, &texture1);
-
-  glfwTerminate();
-  return 0;
 }

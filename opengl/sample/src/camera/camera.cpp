@@ -17,8 +17,9 @@ glm::mat4 Camera::GetViewMatrix() {
   return glm::lookAt(position_, position_ + front_, up_);
 }
 
-void Camera::ProcessKeyboard(MoveDirection dir, GLfloat delta_time) {
-  GLfloat velocity = move_speed_ * delta_time;
+void Camera::ProcessKeyboard(MoveDirection dir) {
+  //GLfloat velocity = move_speed_ * delta_time;
+  GLfloat velocity = move_speed_;
 
   switch (dir) {
   case kForward:
