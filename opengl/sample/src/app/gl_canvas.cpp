@@ -84,6 +84,9 @@ void GLCanvas::OnChar(wxKeyEvent& event) {
     case 'd':
       dir = Camera::kRight;
       break;
+    case 'r':
+      renderer_->camera()->Reset();
+      break;
     default:
       break;
     }

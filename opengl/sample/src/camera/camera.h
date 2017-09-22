@@ -10,6 +10,8 @@ const GLfloat kPitch = 0.0f;
 const GLfloat kSpeed = 0.25f;
 const GLfloat kSensitivity = 0.1f;
 const GLfloat kZoom = 45.0f;
+const glm::vec3 kPosition = glm::vec3(0.0f, 0.0f, 3.0f);
+const glm::vec3 kWorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 class Camera {
 public:
@@ -21,8 +23,8 @@ public:
     kStatic
   };
 
-  Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
-         glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
+  Camera(glm::vec3 position = kPosition,
+         glm::vec3 up = kWorldUp,
          GLfloat pitch = kPitch,
          GLfloat yaw = kYaw);
   ~Camera();
@@ -49,8 +51,6 @@ private:
   GLfloat pitch_;
   GLfloat yaw_;
 
-  GLfloat move_speed_;
-  GLfloat mouse_sensitivity_;
   GLfloat zoom_;
 };
 #endif // CAMERA_H_

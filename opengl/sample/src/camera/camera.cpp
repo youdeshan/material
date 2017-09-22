@@ -1,12 +1,7 @@
 #include "camera/camera.h"
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, GLfloat pitch, GLfloat yaw) 
-  : front_(glm::vec3(0.0f, 0.0f, -1.0f)), move_speed_(kSpeed), mouse_sensitivity_(kSensitivity), zoom_(kZoom) {
-  position_ = position;
-  world_up_ = up;
-  pitch_ = kPitch;
-  yaw_ = kYaw;
-
+  : position_(position), world_up_(up), pitch_(pitch), yaw_(yaw), zoom_(kZoom) {
   UpdateVectors();
 }
 
@@ -19,7 +14,7 @@ glm::mat4 Camera::GetViewMatrix() {
 
 void Camera::ProcessKeyboard(MoveDirection dir) {
   //GLfloat velocity = move_speed_ * delta_time;
-  GLfloat velocity = move_speed_;
+  GLfloat velocity = kSpeed;
 
   switch (dir) {
   case kForward:
@@ -34,11 +29,12 @@ void Camera::ProcessKeyboard(MoveDirection dir) {
   case kRight:
     position_ += velocity * right_;
   }
+  position_.y = 0.0f;
 }
 
 void Camera::ProcessMouseMovement(GLfloat x_offset, GLfloat y_offset, GLboolean contrain_pitch) {
-  x_offset *= mouse_sensitivity_;
-  y_offset *= mouse_sensitivity_;
+  x_offset *= kSensitivity;
+  y_offset *= kSensitivity;
 
   pitch_ += y_offset;
   yaw_ += x_offset;
@@ -57,8 +53,12 @@ void Camera::ProcessMouseScroll(GLfloat y_offset) {
 }
 
 void Camera::Reset() {
-  position_ = glm::vec3(0.0f, 0.0f, 3.0f);
-  front_ = glm::vec3(0.0f, 0.0f, -1.0f);
+  position_ = kPosition;
+  pitch_ = kPitch;
+  yaw_ = kYaw;
+  zoom_ = kZoom;
+
+  UpdateVectors();
 }
 
 void Camera::UpdateVectors() {
