@@ -29,7 +29,6 @@ void Camera::ProcessKeyboard(MoveDirection dir) {
   case kRight:
     position_ += velocity * right_;
   }
-  position_.y = 0.0f;
 }
 
 void Camera::ProcessMouseMovement(GLfloat x_offset, GLfloat y_offset, GLboolean contrain_pitch) {
