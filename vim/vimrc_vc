@@ -8,6 +8,7 @@ vmap <leader>q <ESC>
 nmap <leader>v <C-v>
 nmap <leader>l :vsc VAssistX.ListMethodsInCurrentFile<CR>
 nmap <leader>b :vsc Build.BuildOnlyProject<CR>
+nmap <leader>b :vsc Build.BuildSelection<CR>
 map <leader>c :vsc Edit.CommentSelection<CR>
 map <leader>u :vsc Edit.UncommentSelection<CR>
 map <leader>e :vsc View.ErrorList<CR>
