@@ -76,6 +76,8 @@ glm::vec3 cubePositions[] = {
   glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
+glm::vec3 objectColor = glm::vec3(1.0f, 0.5f, 0.31f);
+glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
 GLRenderer::GLRenderer(IContext* context) : IRenderer(context), program_(NULL), camera_(NULL), mix_val_(0.2) {
   InitGL();
@@ -136,6 +138,10 @@ void GLRenderer::Draw() {
     //model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
     program_->SetMatrix("model", glm::value_ptr(model));
 
+    // Colors
+    program_->setVec3("objectColor", objectColor);
+    program_->setVec3("lightColor", lightColor);
+
     // Draw triangles by vertex
     glDrawArrays(GL_TRIANGLES, 0, 36);
   }
@@ -171,6 +177,8 @@ void GLRenderer::InitGL() {
 
   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+  // Light cube
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   // Remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO

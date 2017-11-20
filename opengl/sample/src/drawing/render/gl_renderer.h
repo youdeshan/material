@@ -25,6 +25,7 @@ protected:
   ShaderProgram* program_;
   Camera* camera_;
   GLuint vao_;
+  GLuint light_vao_;
   GLuint texture0_;
   GLuint texture1_;
 
