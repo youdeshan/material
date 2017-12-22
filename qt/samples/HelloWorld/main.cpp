@@ -3,6 +3,8 @@
 
 #include <QLabel>
 #include <QPushButton>
+#include <QTextCodec>
+
 #include "newspaper.h"
 #include "reader.h"
 #include "logindialog.h"
@@ -10,9 +12,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
     LoginDialog login_dlg;
     if (login_dlg.exec() == QDialog::Accepted) {
+		//QTextCodec::setCodecForLocale(QTextCodec::codecForName("GB2312"));
+
+		MainWindow w;
         w.show();
         return a.exec();
     } else {

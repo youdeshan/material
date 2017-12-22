@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     toolbar->addAction(openAction);
 
     ui->setupUi(this);
+	ui->label->setText(u8"Hello, welcome to QT world! ╩╤с╜сн╣би╫ё║");
 }
 
 MainWindow::~MainWindow()

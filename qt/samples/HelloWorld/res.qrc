@@ -1,8 +1,5 @@
 <RCC>
-    <qresource prefix="/images">
-        <file alias="previous">bt_previous_32.png</file>
-        <file alias="next">bt_next_32.png</file>
-    </qresource>
+    <qresource prefix="/images"/>
     <qresource prefix="/fonts"/>
-    <qresource prefix="/images/zh" lang="zh"/>
+    <qresource lang="zh" prefix="/images/zh"/>
 </RCC>
