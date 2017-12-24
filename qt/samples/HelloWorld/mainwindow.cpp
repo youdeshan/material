@@ -33,3 +33,7 @@ void MainWindow::Open() {
     dlg->setAttribute(Qt::WA_DeleteOnClose); // destroy the dialog when closing the dialog
     dlg->show();
 }
+
+void MainWindow::test_click() {
+    QMessageBox::about(NULL, "About", "The test button was clicked!");
+}

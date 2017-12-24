@@ -8,6 +8,8 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui(new Ui::LoginDialog)
 {
     ui->setupUi(this);
+    ui->UserlineEdit->setText(tr("youdeshan"));
+    ui->PasswdlineEdit->setText(tr("123"));
 }
 
 LoginDialog::~LoginDialog()

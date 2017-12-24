@@ -16,6 +16,9 @@ public:
 
     void Open();
 
+private slots:
+    void test_click();
+
 private:
     Ui::MainWindow *ui;
 };
