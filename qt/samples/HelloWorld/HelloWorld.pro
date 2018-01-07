@@ -29,12 +29,11 @@ SOURCES += main.cpp\
     logindialog.cpp
 
 HEADERS  += mainwindow.h \
-    newspaper.h \
-    reader.h \
     logindialog.h
 
 FORMS    += mainwindow.ui \
-    logindialog.ui
+    logindialog.ui \
+	Widget.ui
 
 RESOURCES += \
     res.qrc

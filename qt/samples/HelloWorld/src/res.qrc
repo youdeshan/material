@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/myimages">
+        <file>images/toolbar_button_save_as.png</file>
+        <file>images/toolbar_button_share.png</file>
+        <file>images/bt_next_32.png</file>
+        <file>images/bt_previous_32.png</file>
+    </qresource>
+</RCC>
