@@ -10,23 +10,11 @@ set(CMAKE_CXX_STANDARD 11) # This is equal to QMAKE_CXX_FLAGS += -std=c++0x
 set(CMAKE_AUTOMOC ON)
 # Instruct CMake to run uic automatically when needed.
 set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
+#set(CMAKE_AUTORCC ON)
 
 # This will find the Qt5 files. You will need a QT5_DIR env variable
 find_package(Qt5Widgets REQUIRED) # Equivalent of QT += widgets
 
-set(SOURCES main.cpp 
-    mainwindow.cpp
-	logindialog.cpp)
-	
-set(HEADERS mainwindow.h 
-    logindialog.h)
-	
-set(UI mainwindow.ui)
+include_directories(${PROJECT_SOURCE_DIR}/src)
 
-set(RESOURCES res.qrc)
-
-# This will create you executable
-add_executable(HelloQt WIN32 ${SOURCES} ${HEADERS} ${UI} ${RESOURCES})
-# This will link necessary Qt5 libraries to your project
-target_link_libraries(HelloQt Qt5::Widgets)
+add_subdirectory(src)
