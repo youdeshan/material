@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="res">
+    <file>images/test.png</file>
+    <file>images/contour_touch.png</file>
+    <file>images/patient_touch.png</file>
+    <file alias="tool_one">images/bt_next_32.png</file>
+    <file alias="open_file">images/toolbar_button_export.png</file>
+    <file alias="save_file">images/toolbar_button_save_as.png</file>
+    <file alias="tool_two">images/bt_previous_32.png</file>
+  </qresource>
+</RCC>

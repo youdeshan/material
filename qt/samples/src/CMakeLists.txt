@@ -5,9 +5,10 @@ set(SOURCES main.cpp
 set(HEADERS mainwindow.h 
     logindialog.h)
 	
-set(UI mainwindow.ui)
+set(UI mainwindow.ui
+   logindialog.ui)
 
-set(RESOURCES res.qrc)
+set(RESOURCES resource.qrc)
 
 # This will create you executable
 add_executable(HelloQt WIN32 ${SOURCES} ${HEADERS} ${UI} ${RESOURCES})

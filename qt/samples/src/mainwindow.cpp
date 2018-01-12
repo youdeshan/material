@@ -4,21 +4,28 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
-    QAction* openAction = new QAction(QIcon(":/images/previous"), tr("&Open..."), this);
-    openAction->setShortcuts(QKeySequence::Open);
-    openAction->setStatusTip(tr("Open an existing file"));
-    connect(openAction, &QAction::triggered, this, &MainWindow::Open);
+    ui(new Ui::MainWindow) {
 
-    //QMenu* file = menuBar()->addMenu(tr("&File"));
-    //file->addAction(openAction);
-
-    QToolBar* toolbar = addToolBar(tr("&File"));
-    toolbar->addAction(openAction);
+    //QToolBar* toolbar = addToolBar(tr("&File"));
+    //toolbar->addAction(openAction);
 
     ui->setupUi(this);
-	ui->label->setText(u8"Hello, welcome to QT world! 欢迎游德山！");
+
+    ui->label->setText(u8"Hello, welcome to QT world! 欢迎游德山！");
+    ui->menu_file->addSeparator();
+
+    // Add menu item(QAction) for save
+    QAction* save_action = new QAction(tr("&Save(&S)"), this);
+    QIcon save_icon(":/res/save_file");
+    save_action->setIcon(save_icon);
+    save_action->setShortcut(QKeySequence(tr("Ctrl+S")));
+    save_action->setStatusTip(tr("Save file"));
+    connect(save_action, &QAction::triggered, this, &MainWindow::OnSaveFile);
+    ui->menu_file->addAction(save_action);
+
+    // Add toolbar item(QAction) for save
+    ui->mainToolBar->addSeparator();
+    ui->mainToolBar->addAction(save_action);
 }
 
 MainWindow::~MainWindow()
@@ -26,10 +33,19 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::Open() {
+void MainWindow::OnNewFile() {
+    QDialog* dlg = new QDialog(this);
+    dlg->setMinimumSize(QSize(300, 200));
+    dlg->setWindowTitle(tr("New file dialog"));
+    dlg->setAttribute(Qt::WA_DeleteOnClose); // destroy the dialog when closing the dialog
+    dlg->show();
+}
+
+void MainWindow::OnSaveFile() {
     //QMessageBox::information(this, tr("Info"), tr("Open"));
     QDialog* dlg = new QDialog(this);
-    dlg->setWindowTitle(tr("Hello, Dialog!"));
+    dlg->setMinimumSize(QSize(300, 200));
+    dlg->setWindowTitle(tr("Save file dialog"));
     dlg->setAttribute(Qt::WA_DeleteOnClose); // destroy the dialog when closing the dialog
     dlg->show();
 }

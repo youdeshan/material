@@ -14,10 +14,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void Open();
 
 private slots:
     void test_click();
+    void OnNewFile();
+    void OnSaveFile();
 
 private:
     Ui::MainWindow *ui;

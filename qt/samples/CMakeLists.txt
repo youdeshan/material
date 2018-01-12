@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 11) # This is equal to QMAKE_CXX_FLAGS += -std=c++0x
 set(CMAKE_AUTOMOC ON)
 # Instruct CMake to run uic automatically when needed.
 set(CMAKE_AUTOUIC ON)
-#set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTORCC ON)
 
 # This will find the Qt5 files. You will need a QT5_DIR env variable
 find_package(Qt5Widgets REQUIRED) # Equivalent of QT += widgets
