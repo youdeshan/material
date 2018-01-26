@@ -1,11 +1,16 @@
 <RCC>
-  <qresource prefix="res">
-    <file>images/test.png</file>
-    <file>images/contour_touch.png</file>
-    <file>images/patient_touch.png</file>
-    <file alias="tool_one">images/bt_next_32.png</file>
-    <file alias="open_file">images/toolbar_button_export.png</file>
-    <file alias="save_file">images/toolbar_button_save_as.png</file>
-    <file alias="tool_two">images/bt_previous_32.png</file>
-  </qresource>
+    <qresource prefix="/res">
+        <file alias="new">images/document-new.png</file>
+        <file alias="open">images/document-open.png</file>
+        <file alias="save">images/document-save.png</file>
+        <file alias="saveas">images/document-save-as.png</file>
+        <file alias="copy">images/editcopy.png</file>
+        <file alias="cut">images/editcut.png</file>
+        <file alias="find">images/edit-find.png</file>
+        <file alias="paste">images/editpaste.png</file>
+        <file alias="undo">images/edit-undo.png</file>
+        <file alias="exit">images/exit.png</file>
+        <file alias="close">images/gtk-close.png</file>
+        <file alias="help">images/help.png</file>
+    </qresource>
 </RCC>

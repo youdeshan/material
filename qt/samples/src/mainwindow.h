@@ -17,6 +17,8 @@ public:
 
 private slots:
     void test_click();
+    void on_user_info_click();
+    void on_user_info_ext_click();
     void OnNewFile();
     void OnSaveFile();
 

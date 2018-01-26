@@ -2,6 +2,9 @@
 #include "ui_mainwindow.h"
 #include <QMessageBox>
 
+#include "user_info_window.h"
+#include "user_info_window_ext.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) {
@@ -14,18 +17,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label->setText(u8"Hello, welcome to QT world! »¶Ó­ÓÎµÂÉ½£¡");
     ui->menu_file->addSeparator();
 
-    // Add menu item(QAction) for save
-    QAction* save_action = new QAction(tr("&Save(&S)"), this);
-    QIcon save_icon(":/res/save_file");
-    save_action->setIcon(save_icon);
-    save_action->setShortcut(QKeySequence(tr("Ctrl+S")));
-    save_action->setStatusTip(tr("Save file"));
-    connect(save_action, &QAction::triggered, this, &MainWindow::OnSaveFile);
-    ui->menu_file->addAction(save_action);
+    /* Add menu item(QAction) for save */
+    //QAction* save_action = new QAction(tr("&Save(&S)"), this);
+    //QIcon save_icon(":/res/save_file");
+    //save_action->setIcon(save_icon);
+    //save_action->setShortcut(QKeySequence(tr("Ctrl+S")));
+    //save_action->setStatusTip(tr("Save file"));
+    //connect(save_action, &QAction::triggered, this, &MainWindow::OnSaveFile);
+    //ui->menu_file->addAction(save_action);
 
-    // Add toolbar item(QAction) for save
-    ui->mainToolBar->addSeparator();
-    ui->mainToolBar->addAction(save_action);
+    //ui->mainToolBar->addSeparator();
+    //ui->mainToolBar->addAction(save_action);
 }
 
 MainWindow::~MainWindow()
@@ -52,4 +54,14 @@ void MainWindow::OnSaveFile() {
 
 void MainWindow::test_click() {
     QMessageBox::about(NULL, "About", "The test button was clicked!");
+}
+
+void MainWindow::on_user_info_click() {
+    UserInfoWindow* user_info_win = new UserInfoWindow(this);
+    user_info_win->show();
+}
+
+void MainWindow::on_user_info_ext_click() {
+    UserInfoWindowExt* user_info_win = new UserInfoWindowExt(this);
+    user_info_win->show();
 }
