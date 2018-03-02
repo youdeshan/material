@@ -2,12 +2,14 @@ set(SOURCES main.cpp
     mainwindow.cpp
 	logindialog.cpp
 	user_info_window.cpp
-	user_info_window_ext.cpp)
+	user_info_window_ext.cpp
+	gl_window.cpp)
 	
 set(HEADERS mainwindow.h 
     logindialog.h
 	user_info_window.h
-	user_info_window_ext.h)
+	user_info_window_ext.h
+	gl_window.h)
 	
 set(UI mainwindow.ui
    logindialog.ui

@@ -82,7 +82,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QPushButton" name="show_opengl">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -90,7 +90,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Minimum</string>
+         <string>OpenGL</string>
         </property>
        </widget>
       </item>
@@ -620,8 +620,8 @@
    <slot>OnPaste()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>315</x>
-     <y>193</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>315</x>
