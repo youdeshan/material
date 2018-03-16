@@ -1,24 +1,39 @@
 set(SOURCES main.cpp 
-    mainwindow.cpp
-	logindialog.cpp
-	user_info_window.cpp
-	user_info_window_ext.cpp
-	gl_window.cpp)
+    view/mainwindow.cpp
+	view/mainwindow.h
+	view/logindialog.cpp
+	view/logindialog.h
+	view/user_info_window.cpp
+	view/user_info_window.h
+	view/user_info_window_ext.cpp
+	view/user_info_window_ext.h
+	view/gl_widget.cpp
+	view/gl_widget.h
 	
-set(HEADERS mainwindow.h 
-    logindialog.h
-	user_info_window.h
-	user_info_window_ext.h
-	gl_window.h)
+	camera/camera.h
+	camera/camera.cpp
 	
-set(UI mainwindow.ui
-   logindialog.ui
-   userinfowindow.ui
-   userinfowindowext.ui)
+	drawing/render/renderer.h
+	drawing/render/gl_renderer.h
+	drawing/render/gl_renderer.cpp
+	
+	drawing/scene/node.h
+	drawing/scene/graph.h
+	drawing/scene/graph.cpp
+	drawing/scene/drawable.h
+	drawing/scene/drawable.cpp
+	)
+source_group_by_dir(SOURCES)
+	
+set(UI ui/mainwindow.ui
+   ui/logindialog.ui
+   ui/userinfowindow.ui
+   ui/userinfowindowext.ui)
+source_group_by_dir(UI)
 
 set(RESOURCES resource.qrc)
 
 # This will create you executable
-add_executable(HelloQt WIN32 ${SOURCES} ${HEADERS} ${UI} ${RESOURCES})
+add_executable(HelloQt WIN32 ${SOURCES} ${UI} ${RESOURCES})
 # This will link necessary Qt5 libraries to your project
 target_link_libraries(HelloQt Qt5::Widgets)

@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(HelloQT)
 
+include("${PROJECT_SOURCE_DIR}/macro.cmake")
+
 set(CMAKE_CXX_STANDARD 11) # This is equal to QMAKE_CXX_FLAGS += -std=c++0x
 
 # Find includes in corresponding build directories
@@ -16,5 +18,6 @@ set(CMAKE_AUTORCC ON)
 find_package(Qt5Widgets REQUIRED) # Equivalent of QT += widgets
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
+include_directories(${PROJECT_SOURCE_DIR}/third_party/include)
 
 add_subdirectory(src)
