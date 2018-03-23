@@ -7,77 +7,68 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <QOpenGLShaderProgram>
-#include <QOpenGLFunctions_3_2_Compatibility>
+#include <QOpenGLFunctions_3_3_Compatibility>
 
+#include "utils/gl_general.h"
 #include "camera/camera.h"
 
 GLfloat vertices[] = {
-  -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-  0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-  -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-  -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+  -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+  0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+  0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+  0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+  -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+  -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-  -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-  0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-  0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-  0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-  -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-  -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+  -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+  0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+  0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+  0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+  -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+  -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
 
-  -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-  -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-  -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-  -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-  -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-  -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+  -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+  -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+  -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+  -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+  -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+  -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-  0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-  0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-  0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+  0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+  0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+  0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+  0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+  0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+  0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-  -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-  0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-  0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-  0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-  -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-  -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+  -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+  0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+  0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+  0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+  -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+  -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-  -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-  0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-  0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-  -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-  -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-};
-
-glm::vec3 cubePositions[] = {
-  glm::vec3(0.0f,  0.0f,  0.0f),
-  glm::vec3(2.0f,  5.0f, -15.0f),
-  glm::vec3(-1.5f, -2.2f, -2.5f),
-  glm::vec3(-3.8f, -2.0f, -12.3f),
-  glm::vec3(2.4f, -0.4f, -3.5f),
-  glm::vec3(-1.7f,  3.0f, -7.5f),
-  glm::vec3(1.3f, -2.0f, -2.5f),
-  glm::vec3(1.5f,  2.0f, -2.5f),
-  glm::vec3(1.5f,  0.2f, -1.5f),
-  glm::vec3(-1.3f,  1.0f, -1.5f)
+  -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+  0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+  0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+  0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+  -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+  -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 };
 
 glm::vec3 objectColor = glm::vec3(1.0f, 0.5f, 0.31f);
 glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+//glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos = glm::vec3(0.7f, 0.7f, 0.7f);
 
-GLRenderer::GLRenderer() : IRenderer(), program_(NULL), camera_(NULL), mix_val_(0.2) {
-  InitGL();
+GLRenderer::GLRenderer() : IRenderer(), cube_program_(NULL), camera_(NULL), mix_val_(0.2) {
 }
 
 GLRenderer::~GLRenderer() {
-  if (program_) delete program_;
-  program_ = NULL;
+  if (cube_program_) delete cube_program_;
+  if (lamp_program_) delete lamp_program_;
+  cube_program_ = NULL;
+  lamp_program_ = NULL;
 
   if (camera_) delete camera_;
   camera_ = NULL;
@@ -93,143 +84,92 @@ void GLRenderer::Resize(int width, int height) {
   win_size_[0] = width;
   win_size_[1] = height;
 
-  QOpenGLFunctions_3_2_Compatibility* funcs = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Compatibility>();
+  QOpenGLFunctions_3_3_Compatibility* funcs = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_3_Compatibility>();
   funcs->glViewport(0, 0, width, height);
 }
 
 void GLRenderer::Draw() {
-  glBindVertexArray(vao_);
-  // Bind textures on corresponding texture units
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, texture0_);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, texture1_);
+  QOpenGLFunctions_3_3_Compatibility* funcs = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_3_Compatibility>();
 
-  glEnable(GL_DEPTH_TEST);
+  funcs->glEnable(GL_DEPTH_TEST);
 
-  glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  funcs->glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+  funcs->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // Be sure to activate the shader before any calls to glUniform
-  program_->Use();
-  program_->SetFloat("mixValue", mix_val_);
+  cube_program_->bind();
+  cube_program_->setUniformValue("objectColor", QVector3D(1.0f, 0.5f, 0.31f));
+  cube_program_->setUniformValue("lightColor", QVector3D(1.0f, 1.0f, 1.0f));
+  cube_program_->setUniformValue("lightPos", QVector3D(lightPos.x, lightPos.y, lightPos.z));
 
   glm::mat4 projection;
   projection = glm::perspective(glm::radians(camera_->zoom()), (GLfloat) win_size_[0] / (GLfloat)win_size_[1], 0.1f, 100.0f);
-  program_->SetMatrix("projection", glm::value_ptr(projection));
+  cube_program_->setUniformValue("projection", QMatrix4x4(glm::value_ptr(glm::transpose(projection))));
 
   glm::mat4 view;
   view = camera_->GetViewMatrix();
-  program_->SetMatrix("view", glm::value_ptr(view));
+  cube_program_->setUniformValue("view", QMatrix4x4(glm::value_ptr(glm::transpose(view))));
 
-  for (GLuint i = 0; i < 10; ++i) {
-    glm::mat4 model;
-    model = glm::translate(model, cubePositions[i]);
-    //model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-    program_->SetMatrix("model", glm::value_ptr(model));
+  glm::mat4 model;
+  cube_program_->setUniformValue("model", QMatrix4x4(glm::value_ptr(glm::transpose(model))));
 
-    // Colors
-    program_->setVec3("objectColor", objectColor);
-    program_->setVec3("lightColor", lightColor);
+  // Render the cube 
+  funcs->glBindVertexArray(cube_vao_);
+  funcs->glDrawArrays(GL_TRIANGLES, 0, 36);
+  funcs->glBindVertexArray(0);
+  cube_program_->release();
 
-    // Draw triangles by vertex
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-  }
+  lamp_program_->bind();
+  lamp_program_->setUniformValue("projection", QMatrix4x4(glm::value_ptr(glm::transpose(projection))));
+  lamp_program_->setUniformValue("view", QMatrix4x4(glm::value_ptr(glm::transpose(view))));
+  model = glm::mat4();
+  model = glm::translate(model, lightPos);
+  model = glm::scale(model, glm::vec3(0.2));
+  lamp_program_->setUniformValue("model", QMatrix4x4(glm::value_ptr(glm::transpose(model))));
 
-  // Draw triangles by indices
-  //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  // Render the light
+  funcs->glBindVertexArray(light_vao_);
+  funcs->glDrawArrays(GL_TRIANGLES, 0, 36);
+
+  funcs->glBindVertexArray(0);
+  lamp_program_->release();
 }
 
 void GLRenderer::InitGL() {
-  //context_->SetCurrent();
+  cube_program_ = new QOpenGLShaderProgram();
+  cube_program_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/res/glsl/colors.vs");
+  cube_program_->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/res/glsl/colors.fs");
+  cube_program_->link();
 
-  //if (!gladLoadGL()) {
-  //  std::cout << "Failed to initialize GLAD" << std::endl;
-  //  return;
-  //}
-  //program_ = new ShaderProgram(shaders);
-  //camera_ = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+  lamp_program_ = new QOpenGLShaderProgram();
+  lamp_program_->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/res/glsl/lamp.vs");
+  lamp_program_->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/res/glsl/lamp.fs");
+  lamp_program_->link();
 
-  //GLuint VBO, EBO;
-  //glGenVertexArrays(1, &vao_);
-  //glGenBuffers(1, &VBO);
-  ////glGenBuffers(1, &EBO);
+  camera_ = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
-  //glBindVertexArray(vao_);
-  //glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  QOpenGLFunctions_3_3_Compatibility* funcs = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_3_Compatibility>();
 
-  //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GL_FLOAT), (void*)0);
-  //glEnableVertexAttribArray(0);
+  GLuint VBO;
+  funcs->glGenBuffers(1, &VBO);
 
-  //glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT)));
-  //glEnableVertexAttribArray(1);
+  funcs->glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  funcs->glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  ////glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  ////glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+  // Init cube vao
+  funcs->glGenVertexArrays(1, &cube_vao_);
+  funcs->glBindVertexArray(cube_vao_);
+  funcs->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GL_FLOAT), (void*)0);
+  funcs->glEnableVertexAttribArray(0);
 
-  //// Light cube
+  funcs->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT)));
+  funcs->glEnableVertexAttribArray(1);
 
-  //glBindBuffer(GL_ARRAY_BUFFER, 0);
-  //// Remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO
-  //// You should unbind the EBO after VAO is unbinded.
-  //// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-  //glBindVertexArray(0);
-  ////glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  // Init light vao
+  funcs->glGenVertexArrays(1, &light_vao_);
+  funcs->glBindVertexArray(light_vao_);
+  funcs->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GL_FLOAT), (void*)0);
+  funcs->glEnableVertexAttribArray(0);
 
-  //// Load and create a texture0
-  //glGenTextures(1, &texture0_);
-  //glBindTexture(GL_TEXTURE_2D, texture0_);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  ////GLfloat border_color[] = { 1.0f, 1.0f, 0.0f, 1.0f };
-  ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-  ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-  ////glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border_color);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  //GLint width, height, nrChannels;
-  //stbi_set_flip_vertically_on_load(true);
-  //GLubyte* data = stbi_load("resources/texture/container.jpg", &width, &height, &nrChannels, 0);
-  //if (data) {
-  //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-  //  glGenerateMipmap(GL_TEXTURE_2D);
-  //}
-  //else {
-  //  std::cout << "Failed to load texture0." << std::endl;
-  //}
-  //stbi_image_free(data);
-  //glBindTexture(GL_TEXTURE_2D, 0);
-
-  //// Load and create a texture1
-  //glGenTextures(1, &texture1_);
-  //glBindTexture(GL_TEXTURE_2D, texture1_);
-  ////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  //data = stbi_load("resources/texture/awesomeface.png", &width, &height, &nrChannels, 0);
-  //if (data) {
-  //  // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-  //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-  //  glGenerateMipmap(GL_TEXTURE_2D);
-  //}
-  //else {
-  //  std::cout << "Failed to load texture1." << std::endl;
-  //}
-  //stbi_image_free(data);
-  //glBindTexture(GL_TEXTURE_2D, 0);
-
-  //program_->Use();
-  //program_->SetInt("texture0", 0);
-  //program_->SetInt("texture1", 1);
-
-  //// Draw in wireframe polygons
-  ////glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-  //// Cull face
-  ////glEnable(GL_CULL_FACE);
-  ////glCullFace(GL_BACK);
-  ////glFrontFace(GL_CCW);
+  funcs->glBindBuffer(GL_ARRAY_BUFFER, 0);
+  funcs->glBindVertexArray(0);
 }

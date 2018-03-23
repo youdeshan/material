@@ -128,6 +128,8 @@ void MainWindow::on_opengl_widget_click() {
   QWidget* w = new QWidget(this, Qt::Window);
 
   QVBoxLayout* layout = new QVBoxLayout();
+  layout->setMargin(0);
+
   GLWidget* gl_widget = new GLWidget(w);
   layout->addWidget(gl_widget);
 

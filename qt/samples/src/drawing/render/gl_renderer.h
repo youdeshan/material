@@ -15,19 +15,18 @@ public:
   void Draw() override;
   void Resize(int width, int height) override;
 
+  void InitGL();
   Camera* camera() { return camera_; }
   GLfloat mix_val() { return mix_val_; }
   void set_mix_val(GLfloat val);
 
 protected:
-  void InitGL();
 
-  QOpenGLShaderProgram* program_;
+  QOpenGLShaderProgram* cube_program_;
+  QOpenGLShaderProgram* lamp_program_;
   Camera* camera_;
-  GLuint vao_;
+  GLuint cube_vao_;
   GLuint light_vao_;
-  GLuint texture0_;
-  GLuint texture1_;
 
   GLfloat mix_val_;
 };

@@ -256,7 +256,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_new">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/res/new</normaloff>:/res/new</iconset>
    </property>
    <property name="text">
@@ -271,7 +271,7 @@
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/res/open</normaloff>:/res/open</iconset>
    </property>
    <property name="text">
@@ -286,7 +286,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/res/save</normaloff>:/res/save</iconset>
    </property>
    <property name="text">
@@ -301,7 +301,7 @@
   </action>
   <action name="actionSave_as">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/res/saveas</normaloff>:/res/saveas</iconset>
    </property>
    <property name="text">
@@ -316,7 +316,7 @@
   </action>
   <action name="actionClose">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/res/close</normaloff>:/res/close</iconset>
    </property>
    <property name="text">
@@ -331,7 +331,7 @@
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/res/exit</normaloff>:/res/exit</iconset>
    </property>
    <property name="text">
@@ -343,7 +343,7 @@
   </action>
   <action name="actionCut">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/res/cut</normaloff>:/res/cut</iconset>
    </property>
    <property name="text">
@@ -358,7 +358,7 @@
   </action>
   <action name="actionCopy">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/res/copy</normaloff>:/res/copy</iconset>
    </property>
    <property name="text">
@@ -373,7 +373,7 @@
   </action>
   <action name="actionPaste">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/res/paste</normaloff>:/res/paste</iconset>
    </property>
    <property name="text">
@@ -388,7 +388,7 @@
   </action>
   <action name="actionUndo">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/res/undo</normaloff>:/res/undo</iconset>
    </property>
    <property name="text">
@@ -403,7 +403,7 @@
   </action>
   <action name="actionAbout">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/res/help</normaloff>:/res/help</iconset>
    </property>
    <property name="text">
@@ -418,7 +418,7 @@
   </action>
   <action name="actionFind">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset resource="../resource.qrc">
      <normaloff>:/res/find</normaloff>:/res/find</iconset>
    </property>
    <property name="text">
@@ -434,7 +434,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="resource.qrc"/>
+  <include location="../resource.qrc"/>
  </resources>
  <connections>
   <connection>

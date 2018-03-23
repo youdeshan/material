@@ -12,5 +12,9 @@
         <file alias="exit">images/exit.png</file>
         <file alias="close">images/gtk-close.png</file>
         <file alias="help">images/help.png</file>
+        <file>glsl/colors.fs</file>
+        <file>glsl/colors.vs</file>
+        <file>glsl/lamp.fs</file>
+        <file>glsl/lamp.vs</file>
     </qresource>
 </RCC>
