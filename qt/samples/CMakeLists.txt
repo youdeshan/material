@@ -18,6 +18,7 @@ set(CMAKE_AUTORCC ON)
 find_package(Qt5Widgets REQUIRED) # Equivalent of QT += widgets
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
+include_directories(${PROJECT_BINARY_DIR}/src)
 include_directories(${PROJECT_SOURCE_DIR}/third_party/include)
 
 add_subdirectory(src)
