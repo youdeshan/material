@@ -33,6 +33,7 @@ public:
 
   glm::mat4 GetViewMatrix();
   GLfloat zoom() { return zoom_; }
+  glm::vec3 position() { return position_; }
 
   void ProcessKeyboard(MoveDirection dir);
   void ProcessMouseMovement(GLfloat x_offset, GLfloat y_offset, GLboolean contrain_pitch = true);

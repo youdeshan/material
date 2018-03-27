@@ -80,7 +80,7 @@ void GLWidget::wheelEvent(QWheelEvent *event) {
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *event) {
-    Camera::MoveDirection dir = Camera::kStatic;
+   Camera::MoveDirection dir = Camera::kStatic;
     switch (event->key()) {
     case Qt::Key_W:
       dir = Camera::kForward;

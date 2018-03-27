@@ -100,6 +100,8 @@ void GLRenderer::Draw() {
   cube_program_->setUniformValue("objectColor", QVector3D(1.0f, 0.5f, 0.31f));
   cube_program_->setUniformValue("lightColor", QVector3D(1.0f, 1.0f, 1.0f));
   cube_program_->setUniformValue("lightPos", QVector3D(lightPos.x, lightPos.y, lightPos.z));
+  glm::vec3 camera_pos = camera_->position();
+  cube_program_->setUniformValue("viewPos", QVector3D(camera_pos.x, camera_pos.y, camera_pos.z));
 
   glm::mat4 projection;
   projection = glm::perspective(glm::radians(camera_->zoom()), (GLfloat) win_size_[0] / (GLfloat)win_size_[1], 0.1f, 100.0f);
