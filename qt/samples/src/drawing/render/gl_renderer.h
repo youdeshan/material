@@ -29,6 +29,7 @@ protected:
   GLuint light_vao_;
 
   GLfloat mix_val_;
+  GLuint texture_id_;
 };
 
 #endif // GL_RENDER_H

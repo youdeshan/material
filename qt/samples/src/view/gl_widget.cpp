@@ -96,6 +96,7 @@ void GLWidget::keyPressEvent(QKeyEvent *event) {
       break;
     case Qt::Key_R:
       renderer_->camera()->Reset();
+      update();
       break;
     default:
       break;
