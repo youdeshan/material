@@ -230,8 +230,8 @@
   <widget class="QToolBar" name="mainToolBar">
    <property name="iconSize">
     <size>
-     <width>32</width>
-     <height>32</height>
+     <width>22</width>
+     <height>22</height>
     </size>
    </property>
    <attribute name="toolBarArea">
@@ -272,7 +272,8 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="../resource.qrc">
-     <normaloff>:/res/open</normaloff>:/res/open</iconset>
+     <normaloff>:/res/open</normaloff>
+     <activeoff>:/res/open_hover</activeoff>:/res/open</iconset>
    </property>
    <property name="text">
     <string>Open(&amp;O)</string>
