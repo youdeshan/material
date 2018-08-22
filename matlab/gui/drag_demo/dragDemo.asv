@@ -1,0 +1,64 @@
+function dragDemo
+%% Demonstrate dragging patch objects
+% and manipulating with keys
+% Author: Dodge Flannelette
+figure(1)
+
+%% draw two patch objects
+axis([0, 10, 0, 5]);
+hpatch(1)=patch([1, 2, 2, 1, 1],[2.2, 2, 3.2, 3, 2.2],'r');
+hpatch(2)=patch([5, 8, 9, 5, 5],[2.2, 2, 3.2, 3, 2.2], 'g');
+%% set callbacks for button down, up, and keypresses
+set(hpatch(1), 'ButtonDownFcn', @patchButtonDown);
+set(hpatch(2), 'ButtonDownFcn', @patchButtonDown);
+set(gcf, 'WindowButtonUpFcn', @ButtonUp);
+set(gcf, 'KeyPressFcn', @proceshpatchsKey);
+
+%% Button Functions
+function patchButtonDown(hpatch, eventdata)
+% when the patch is clicked, set the motion function.
+% Get the position of the patch
+%x=get(hpatch, 'XData');
+%y=get(hpatch, 'YData');
+% The offset is the difference between the lower left
+% of the object (x(1),y(1)) and the mouse position when button
+% was pushed down.
+%lowerleft=[x(1), y(1)];
+curr_pt = get(gca, 'CurrentPoint');
+previous_pt=[curr_pt(1, 1), curr_pt(1, 2)];
+%offset=[curr_pt(1, 1), curr_pt(1, 2)]-lowerleft;
+
+% set the WindowButtonMotionFcn and give it 2 additional
+% arguments: the patch handle and the offset
+setappdata(gcf, 'SelectedPatch', hpatch);
+setappdata(gcf, 'previous_point', previous_pt);
+set(gcf, 'WindowButtonMotionFcn', ...
+    {@figButtonMotion, hpatch});
+
+function figButtonMotion(src, eventdata, hselected)
+% Moves the object with handle hselected.
+% The offset is the difference between the lower left
+% of the object and the mouse position when button
+% was pushed down.
+% Get position of vertices
+x=get(hselected, 'XData');
+y=get(hselected, 'YData');
+% Find vertex coordinates relative to (x(1),y(1))
+%xr=x-x(1);
+%yr=y-y(1);
+
+% Get the mouse cursor Location
+curr_pt = get(gca, 'CurrentPoint');
+previous_pt = getappdata(gcf, 'previous_point');
+delta_pt = curr_pt - previous_pt;
+% Change the position of the patch
+%set(hselected, 'XData', curr_pt(1,1)-offset(1)+xr);
+set(hselected, 'XData', curr_pt(1,1)-previous_pt(1) + x);
+%set(hselected, 'YData', curr_pt(1,2)-offset(2)+yr);
+set(hselected, 'YData', curr_pt(1,2)-previous_pt(2) + y);
+
+setappdata(gcf, 'previous_point', curr_pt);
+
+function ButtonUp(src, eventdata);
+% when the button is released, turn off the motion function
+set(gcf, 'WindowButtonMotionFcn', ' ')
