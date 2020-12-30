@@ -15,8 +15,15 @@ pre-build
 ////////////////////////////////////////////////
 
 build third-party libraries or tools
-1. build wxWidgets
+sudo apt install libgl-dev
+sudo apt install libglu1-mesa-dev
+sudo apt install freeglut3-dev // Only need to install freeglut??? Maybe it will install the dependency
+
+1. build wxWidgets_3.1.4 on Ubuntu 18.04.3
+   ./configure --help // To see the list of options
    ./configure --prefix=$CMAKE_INSTALL_PREFIX --disable-shared --enable-debug
+   --with-gtk=3 --with-opengl
+
    make
    make install
    
