@@ -6,6 +6,7 @@
 #include <wx/msgdlg.h>
 
 #include "app/gl_canvas.h"
+#include "util/log.h"
 
 #define ID_LOG_WINDOW wxID_HIGHEST + 10
 
@@ -35,9 +36,7 @@ MainFrame::MainFrame(const wxString& title)
   vAttrs.PlatformDefaults().Defaults().EndList();
   bool accepted = wxGLCanvas::IsDisplaySupported(vAttrs);
   if (accepted) {
-#if wxUSE_LOGWINDOW
-      wxLogMessage("The display supports required visual attribute.");
-#endif
+      LOG_MESSAGE("The display supports required visual attribute.");
   } else {
 #if wxUSE_LOGWINDOW
       wxLogMessage("First try with opengl default visual attributes failed.");
