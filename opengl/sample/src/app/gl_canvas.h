@@ -21,6 +21,8 @@ protected:
   void OnMouseMotion(wxMouseEvent& event);
   void OnMouseWheel(wxMouseEvent& event);
 
+  void Init();
+
   GLRenderer* renderer_;
   Graph* scene_graph_;
   int win_height_;
