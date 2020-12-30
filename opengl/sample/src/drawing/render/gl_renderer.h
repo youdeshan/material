@@ -18,9 +18,9 @@ public:
   Camera* camera() { return camera_; }
   GLfloat mix_val() { return mix_val_; }
   void set_mix_val(GLfloat val);
+  void InitGL();
 
 protected:
-  void InitGL();
 
   ShaderProgram* program_;
   Camera* camera_;

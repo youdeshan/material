@@ -80,7 +80,6 @@ glm::vec3 objectColor = glm::vec3(1.0f, 0.5f, 0.31f);
 glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
 GLRenderer::GLRenderer(IContext* context) : IRenderer(context), program_(NULL), camera_(NULL), mix_val_(0.2) {
-  InitGL();
 }
 
 GLRenderer::~GLRenderer() {
@@ -133,7 +132,7 @@ void GLRenderer::Draw() {
   program_->SetMatrix("view", glm::value_ptr(view));
 
   for (GLuint i = 0; i < 10; ++i) {
-    glm::mat4 model;
+    glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, cubePositions[i]);
     //model = glm::rotate(model, (GLfloat)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
     program_->SetMatrix("model", glm::value_ptr(model));
@@ -204,8 +203,7 @@ void GLRenderer::InitGL() {
   if (data) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
-  }
-  else {
+  } else {
     std::cout << "Failed to load texture0." << std::endl;
   }
   stbi_image_free(data);
@@ -224,8 +222,7 @@ void GLRenderer::InitGL() {
     // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
-  }
-  else {
+  } else {
     std::cout << "Failed to load texture1." << std::endl;
   }
   stbi_image_free(data);
